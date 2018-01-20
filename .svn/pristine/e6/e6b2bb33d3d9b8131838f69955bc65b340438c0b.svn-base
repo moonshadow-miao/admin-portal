@@ -1,0 +1,99 @@
+import {login, logout, getInfo} from '@/api/login'
+import {getToken, setToken, removeToken} from '@/utils/auth'
+import Cookies from 'js-cookie'
+import {Message, MessageBox} from 'element-ui'
+
+const isMobile = /Android|webOS|iPhone|iPod|BlackBerry|iPad/i.test(navigator.userAgent)
+const initUser = {
+  name: '',
+  avatar: '',
+  roles: [],
+}
+const common = {
+  namespaced: true,
+  state: {
+    token: getToken(),
+    user: Object.assign({}, initUser),
+    isMobile: isMobile,
+    showTag: false,
+    sidebar: {
+      opened: !isMobile && !+Cookies.get('sidebarStatus')
+    },
+    cachedViews: ['spManageIndex'],
+    currentView: ''
+  },
+
+  mutations: {
+    SET_USER: (state, userInfo) => {
+      state.user = Object.assign(state.user, userInfo)
+    },
+    REMOVE_USER: (state) => {
+      state.user = Object.assign(state.user, initUser)
+    },
+    ADD_CACHED_VIEWS: (state) => {
+
+    },
+    DEL_CACHED_VIEWS: (state) => {
+      if (state.cachedViews.length <= 1) return
+    },
+    CHANGE_TAG: (state, status) => {
+      state.showTag = status
+    },
+    TOGGLE_SIDEBAR: state => {
+      if (state.sidebar.opened) {
+        Cookies.set('sidebarStatus', 1)
+      } else {
+        Cookies.set('sidebarStatus', 0)
+      }
+      state.sidebar.opened = !state.sidebar.opened
+    },
+  },
+
+  actions: {
+    // 登录
+    login({commit}, userInfo) {
+      return new Promise((resolve) => {
+        login(userInfo).then(response => {
+          setToken(response.token)
+          commit('SET_USER', response)
+          Message({message: '登录成功!', type: 'success', duration: 2 * 1000})
+          resolve()
+        }).catch(err => {
+          Message({message: err.message, type: 'error', duration: 2 * 1000})
+        })
+      })
+    },
+
+    // 获取用户信息
+    getInfo({commit, state}) {
+      return new Promise((resolve) => {
+        getInfo(state.token).then(response => {
+          commit('SET_USER', response.response)
+          resolve(response)
+        })
+      })
+    },
+
+    // 登出
+    logOut({commit, state}) {
+      return new Promise((resolve) => {
+        logout(state.token).then(() => {
+          commit('REMOVE_USER')
+          removeToken()
+          resolve()
+        })
+      })
+    },
+
+    // 前端 登出
+    fedLogOut({commit}) {
+      return new Promise(resolve => {
+        commit('SET_TOKEN', '')
+        removeToken()
+        resolve()
+      })
+    }
+  }
+}
+
+export default common

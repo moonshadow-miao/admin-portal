@@ -1,0 +1,20 @@
+import request from '@/utils/request'
+
+// 获取企业列表
+export function Busi_spManage_getSpList(param) {
+  return request({
+    url: '/sp/sp-list',
+    method: 'get',
+    params: param
+  })
+}
+
+// 获取用户列表
+export function Busi_spManage_getUserList(param) {
+  return request({
+    url: '/sp/user-list',
+    method: 'get',
+    params: param,
+  })
+}
+

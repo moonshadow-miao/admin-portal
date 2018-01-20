@@ -1,0 +1,23 @@
+import Layout from '@/views/layout/Layout'
+import {asyncImport} from  '@/utils'
+export default {
+  path: '/example',
+  component: Layout,
+  redirect: '/example/table',
+  name: 'Example',
+  meta: { title: '示例', icon: 'example' },
+  children: [
+    {
+      path: 'table',
+      name: 'Table',
+      component: asyncImport('table/index'),
+      meta: { title: '表格', icon: 'table' }
+    },
+    {
+      path: 'tree',
+      name: 'Tree',
+      component: asyncImport('tree/index'),
+      meta: { title: '树结构', icon: 'tree' }
+    }
+  ]
+}

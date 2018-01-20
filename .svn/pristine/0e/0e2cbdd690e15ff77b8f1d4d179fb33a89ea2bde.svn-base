@@ -1,0 +1,14 @@
+import importType from "../_import";
+const asyncImport =  process.env.NODE_ENV === 'development' ?  importType.dev : importType.prod
+export default {
+  path: '/form',
+    component: asyncImport('layout/Layout'),
+  children: [
+  {
+    path: 'index',
+    name: 'Form',
+    component: asyncImport('form/index'),
+    meta: { title: '表格', icon: 'form' }
+  }
+]
+}

@@ -1,0 +1,39 @@
+import request from '@/utils/request'
+
+// 获取企业列表
+export function Busi_spManage_getSpList(params) {
+  return request({
+    url: '/sp/sp-list',
+    method: 'get',
+    params,
+    loading: true
+  })
+}
+
+// 获取用户列表
+export function Busi_spManage_getUserList(params) {
+  return request({
+    url: '/sp/user-list',
+    method: 'get',
+    params,
+    loading: true
+  })
+}
+
+// 冻结/解冻单个企业
+export function Busi_spManage_freeze(data) {
+  return request({
+    url: '/sp/freeze',
+    method: 'post',
+    data
+  })
+}
+
+// 批量冻结/解冻企业
+export function Busi_spManage_batchFreeze(data) {
+  return request({
+    url: '/sp/batch-freeze',
+    method: 'post',
+    data
+  })
+}

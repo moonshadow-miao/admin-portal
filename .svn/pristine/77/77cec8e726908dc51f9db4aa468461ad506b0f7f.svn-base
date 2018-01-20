@@ -1,0 +1,15 @@
+import Layout from '@/views/layout/Layout'
+import {asyncImport} from  '@/utils'
+export default {
+  path: '/form',
+  component: Layout,
+  meta: { title: '产品管理', icon: 'form' },
+  children: [
+  {
+    path: 'index',
+    name: 'Form',
+    component: asyncImport('form/index'),
+    meta: { title: '表格'}
+  }
+]
+}

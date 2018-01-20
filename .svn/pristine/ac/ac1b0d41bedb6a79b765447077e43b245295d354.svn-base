@@ -1,0 +1,165 @@
+<template>
+  <div class="platformSelector-contianer el-input el-input--small">
+    <input v-model="platformName" class="el-input__inner" @click.stop="handleClick" style="width:48%;"/>
+    <el-select style="width:49%" v-model="city" v-if="isCity" @change="handelChange">
+      <el-option label="地市" value=""></el-option>
+      <el-option v-for="(item ,index) in citiesOption" :key="index" :label="item.name" :value="item.id"></el-option>
+    </el-select>
+    <div class="platformSelector" v-show="isShow" ref="platform">
+      <div class="platformTab">
+        <dl class="clearfix">
+          <dt>#</dt>
+          <dd>
+            <a value="" @click.stop="selectPlatform('')">全国</a>
+          </dd>
+        </dl>
+        <dl v-for="(item ,key) in platformArr" :key="key" class="clearfix">
+          <dt>{{key}}</dt>
+          <dd>
+            <a v-for="(name,value) in item" :key="key+''+value" :value="name.id" @click.stop="selectPlatform(name)">
+              {{name.name}}
+            </a>
+          </dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+
+</template>
+
+<script>
+  import {CONSTANT} from '@/utils/constant';
+
+  export default {
+    name: "platformSelector",
+    data() {
+      return {
+        isShow: false,
+        platformName: '',
+        city: '',
+        platformList: CONSTANT.platformList,
+        citiesMap: CONSTANT.citiesMap,
+        citiesOption: []
+      }
+    },
+    props:{
+      isCity:{
+        type:Boolean,
+        default:false
+      }
+    },
+    created() {
+      const obj = {};
+      this.platformList.forEach((item) => {
+        const firstCharacter = (item.pinyin || item.shortName).slice(0, 1).toUpperCase();
+        if (!obj[firstCharacter]) {
+          obj[firstCharacter] = [item];
+        } else {
+          obj[firstCharacter].push(item);
+        }
+      });
+      const sortObj = {};
+      for (let i = 65; i < 91; i++) {
+        let key = String.fromCharCode(i);
+        if (obj[key]) {
+          sortObj[key] = obj[key];
+        }
+      }
+      this.platformArr = sortObj;
+
+    },
+    filters: {},
+    mounted() {
+      document.addEventListener('click', () => {
+        this.isShow=false;
+      });
+      this.$nextTick(()=>{
+        this.$refs['platform'].addEventListener('click',(e)=>{
+          //阻止时间冒泡
+          e.cancelBubble = true;
+        });
+      });
+    },
+    methods: {
+      selectPlatform(obj) {
+        if (!obj) {
+          obj = {
+            name: "全国",
+            value: '',
+            id: ''
+          };
+        }
+        this.isShow = false;
+        this.platformName = obj.name;
+        this.$emit('platformChange', obj);
+        if (this.isCity) {
+          this.city = "";
+          this.citiesOption = this.citiesMap[obj.id];
+        }
+      },
+      handleClick(e) {
+        const target = e.target;
+        const position = target.getBoundingClientRect();
+        const top = position.top + position.height + 1 + 'px';
+        const left = position.left + 'px';
+        this.$refs['platform'].style.position = 'fixed';
+        this.$refs['platform'].style.top = top;
+        this.$refs['platform'].style.left = left;
+        this.$refs['platform'].style.zIndex = 99999;
+        this.$refs['platform'].style.background = '#fff';
+        //this.$refs['platform'].cssText =`'position':'absolute';'left': ${left};'top': ${top};`;
+        this.isShow = true;
+      },
+      handelChange() {
+        this.$emit('cityChange', this.city);
+      }
+    },
+    destroyed() {
+      document.removeEventListener('click', () => {
+
+      });
+    }
+  }
+</script>
+
+<style scoped lang="scss">
+
+  .platformSelector {
+    width: 380px;
+    border: 1px solid #B3CDC0;
+    overflow: hidden;
+    font-size: 12px;
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
+
+  dl {
+    margin: 0;
+  }
+
+  .platformTab dl dt {
+    float: left;
+    padding-left: 3px;
+    color: #3a8fc8;
+    text-indent: 5px;
+    line-height: 25px;
+    font-size: 14px;
+    width: 20px;
+    font-weight: 700;
+  }
+
+  .platformTab dl dd {
+    margin-left: 2px;
+    float: left;
+    width: 326px;
+  }
+
+  .platformTab dl dd a {
+    padding-left: 5px;
+    min-width: 66px;
+    line-height: 25px;
+    display: inline-block;
+    color: #333;
+    text-decoration: none;
+  }
+
+  }
+</style>

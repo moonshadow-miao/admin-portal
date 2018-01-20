@@ -1,0 +1,48 @@
+<template>
+  <div>
+    <div class="tag-list">
+      <span class="tag label label-info" check-val="101">全部
+        <span class="cursor el-icon-close"></span>
+      </span>
+    </div>
+    <div class="tag-panel m-t-10">
+    
+    </div>
+  </div>
+</template>
+<script>
+  import {getIndustries} from '@/api/common'
+  
+  export default {
+    name: 'industries',
+    data() {
+      return {}
+    },
+    created() {
+      getIndustries().then(res => console.log(res))
+    },
+    methods: {},
+    components: {}
+  }
+</script>
+<style lang='scss' scoped rel='stylesheet/scss' type='text/scss'>
+  @import "src/styles/variables.scss";
+  .tag{
+    display: inline-block;
+    margin-top: 2px;
+    margin-right: 2px;
+    line-height: 16px;
+    padding: 4px 9px;
+    color: white;
+    font-weight: normal;
+    background-color: $btn;
+    font-size: 12px;
+    border-radius: 4px;
+  }
+  .tag-panel{
+    background-color: #f0f0f0;
+    width: 800px;
+    height: 300px;
+  }
+
+</style>

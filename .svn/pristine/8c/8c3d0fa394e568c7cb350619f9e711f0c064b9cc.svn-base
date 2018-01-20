@@ -1,0 +1,227 @@
+<template>
+  <div class="search-options">
+    <Search @query="query">
+      <div slot="rol_first">
+        <el-form-item label="省份:">
+          <Platform :platform.sync="searchOptions.platform" :city.sync="searchOptions.city"/>
+        </el-form-item>
+        <el-form-item label="企业类型:">
+          <el-select v-model="searchOptions.spType" placeholder="请选择企业类型">
+            <el-option label="全部" value=""></el-option>
+            <el-option label="正式" value="1"></el-option>
+            <el-option label="测试" value="1"></el-option>
+            <el-option label="体验" value="2"></el-option>
+            <el-option label="联通" value="2"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="联系人手机号">
+          <el-input v-model="searchOptions.customerManagerMdn"></el-input>
+        </el-form-item>
+      </div>
+      <div slot="rol_second">
+        <el-form-item>
+          <div class="empty-item"></div>
+        </el-form-item>
+        <el-form-item label="开户日期:">
+          <el-date-picker @change="dateLink" popper-class="date" v-model="searchOptions.startTime" style="width:48%"
+                          type="date" placeholder="开始日期"></el-date-picker>
+          <el-date-picker ref="endDate" popper-class="date" v-model="searchOptions.endTime" style="width:48%"
+                          type="date" placeholder="结束日期"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="企业编号:">
+          <el-input placeholder="支持填写同省至多10个企业编号" v-model="searchOptions.spCode"></el-input>
+        </el-form-item>
+      </div>
+      <div slot="rol_third">
+        <el-form-item>
+          <div class="empty-item"></div>
+        </el-form-item>
+        <el-form-item label="企业名称:">
+          <el-input v-model="searchOptions.spName"></el-input>
+        </el-form-item>
+        <el-form-item label="帜讯销售:">
+          <el-input v-model="searchOptions.customerManagerName"></el-input>
+        </el-form-item>
+      </div>
+      <div slot="rol">
+        <el-form-item label="企业状态:">
+          <el-checkbox-group v-model="searchOptions.status">
+            <el-checkbox label="1" name="status">正常</el-checkbox>
+            <el-checkbox label="2" name="status">预开户</el-checkbox>
+            <el-checkbox label="3" name="status">冻结</el-checkbox>
+            <el-checkbox label="5" name="status">销户</el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+      </div>
+    </Search>
+    
+    <Centers title="企业列表">
+      <el-dropdown size="small" trigger="click" @command="batchOperation">
+        <el-button class="w-100" size="small" type="primary">批量操作<i class="el-icon-caret-bottom el-icon--right"></i>
+        </el-button>
+        <el-dropdown-menu class="w-100" slot="dropdown">
+          <el-dropdown-item command="freeze">冻结</el-dropdown-item>
+          <el-dropdown-item command="thaw">解冻</el-dropdown-item>
+          <el-dropdown-item command="changeSale">变更销售</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </Centers>
+    
+    <List :selectList.sync="selectList" :selection="true" :data="tableData" @query="query" :dataCount="dataCount">
+      <el-table-column fixed prop="spCode" label="企业编号" min-width="80"></el-table-column>
+      <el-table-column fixed prop="spName" label="企业名称" min-width="140"></el-table-column>
+      <el-table-column label="省份/地市" min-width="110">
+        <template slot-scope="{row:{platform,city}}">
+          <span>{{platform +'/'+ city}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="createTime" label="开户日期" min-width="140"></el-table-column>
+      <el-table-column prop="spType" label="企业类型" min-width="75"></el-table-column>
+      <el-table-column prop="contactName" label="计费号码" min-width="100"></el-table-column>
+      <el-table-column prop="customerManagerName" label="帜讯销售" min-width="75"></el-table-column>
+      <el-table-column prop="customerManagerMdn" label="帜讯销售号码" min-width="105"></el-table-column>
+      <el-table-column prop="certification" label="证件" min-width="50"></el-table-column>
+      <el-table-column label="企业状态" min-width="65">
+        <template slot-scope="{row}">{{SP_STATUS[row.status]}}</template>
+      </el-table-column>
+      <el-table-column fixed="right" class="text-center" label="操作" width="190">
+        <template slot-scope="{row}">
+          <router-link :to="{name:'spEdit',params:{id:row.id}}">
+            <el-button type="text" size="small">修改</el-button>
+          </router-link>
+          <el-button @click="cancellation(row.id)" type="text" size="small">销户</el-button>
+          <el-button
+            @click="showPop(row.status == SP_STATUS_MAP.FREEZE ?SP_STATUS_MAP.NORMAL:SP_STATUS_MAP.FREEZE,row.id)"
+            type="text" size="small">{{row.status == SP_STATUS_MAP.FREEZE?'解冻':'冻结'}}
+          </el-button>
+          <el-button @click="changeSale(row.id)" type="text" size="small">变更销售</el-button>
+        </template>
+      </el-table-column>
+    </List>
+    
+    <el-dialog custom-class="pop-with-remark" :visible.sync="dialogVisible" width="30%">
+      <el-alert :closable="false" title="" :type="pop.type" :description="pop.description" show-icon></el-alert>
+      <p class="p-5">{{pop.status == SP_STATUS_MAP.NORMAL ? '解冻' :SP_STATUS [pop.status]}}原因 :</p>
+      <el-input type="textarea" :rows="2" placeholder="请输入原因" v-model="remark">
+      </el-input>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button @click="handlePop" type="primary">确 定</el-button>
+      </span>
+    </el-dialog>
+  
+  </div>
+</template>
+
+<script>
+  import {Busi_spManage_getSpList,Busi_spManage_freeze,Busi_spManage_batchFreeze} from '@/api/business'
+  import Platform from '@/components/PlatformSelector/platformSelector'
+  import {SP_STATUS, SP_STATUS_MAP} from '@/utils/constant'
+  
+  export default {
+    name: "spManageIndex",
+    data() {
+      return {
+        tableData: [],
+        dataCount: 0,
+        selectList: [],
+        searchOptions: {
+          spType: '',
+          status: [],
+          platform: '',
+          city: ''
+        },
+        SP_STATUS: SP_STATUS,
+        SP_STATUS_MAP: SP_STATUS_MAP,
+        dialogVisible: false,
+        remark: '',
+        pop: {type: '', isAll:false, description: '', status: '', param: {}}
+      }
+    },
+    created() {
+      this.query()
+    },
+    components: {Platform},
+    methods: {
+      dateLink() {
+        this.$refs.endDate.focus()
+      },
+      query(page = 1) {
+        Busi_spManage_getSpList(Object.assign(this.searchOptions, {curPage: page})).then(({data, dataCount}) => {
+          this.tableData = data
+          this.dataCount = dataCount
+        })
+      },
+      batchOperation(type) {
+        if (!this.selectList.length) {
+          this.$message({message: '请至少选择一个企业!', type: 'warning'});
+          return
+        }
+        switch (type) {
+          case 'freeze':
+            this.showPop(SP_STATUS_MAP.FREEZE,null,true);
+            break;
+          case 'thaw':
+            this.showPop(SP_STATUS_MAP.NORMAL,null,true);
+            break;
+          case 'changeSale':
+            this.changeSaleAll();
+            break;
+        }
+      },
+      changeSaleAll() {
+      
+      },
+      changeSale(){
+        
+      },
+      cancellation(id) {
+        this.dialogVisible = true
+        this.pop = {
+          type: 'warning',
+          description: `此操作无法撤回！销户后，企业将无法再恢复正常状态，是否确定销户？`,
+          status:SP_STATUS_MAP.CANCELLATION,
+          isAll:false,
+          param: {
+            spId: id,
+            operationType: SP_STATUS_MAP.CANCELLATION
+          }
+        }
+      },
+      showPop(status, id ,isAll) {
+        this.dialogVisible = true
+        let allow = status == SP_STATUS_MAP.NORMAL ? '可以' : '不能'
+        let type = status == SP_STATUS_MAP.NORMAL ? '解冻' : '冻结'
+        this.pop = {
+          type: 'warning',
+          description: `${type}后，企业将${allow}进行任何业务操作，且${allow}登录一信通企业信息服务平台,是否确认${type}？`,
+          status: status,
+          isAll:isAll,
+          param: {
+            spId: id,
+            operationType: status
+          }
+        }
+      },
+      handlePop() {
+        if(!this.remark){
+          this.$message({message: '原因不能为空', type: 'warning'});
+          return
+        }
+        if(this.pop.isAll){
+          let param ={remark:this.remark,spIds:this.selectList,operationType:this.pop.param.operationType}
+          Busi_spManage_batchFreeze(param).then(({msg})=>{this.$message({message: msg, type: 'success'});})
+        }else {
+          let param = Object.assign({},this.pop.param,{remark:this.remark})
+          Busi_spManage_freeze(param).then(({msg})=>{this.$message({message: msg, type: 'success'});})
+        }
+        this.remark = ''
+        this.dialogVisible = false
+      }
+    }
+  }
+</script>
+
+<style lang='scss' rel='stylesheet/scss' type='text/scss'>
+
+</style>

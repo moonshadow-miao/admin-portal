@@ -1,0 +1,23 @@
+const _import = require('../_import_' + (process.env.NODE_ENV ==='development'?'development':'production'))
+
+export default {
+  path: '/example',
+  component: _import('layout/Layout'),
+  redirect: '/example/table',
+  name: 'Example',
+  meta: { title: '示例', icon: 'example' },
+  children: [
+    {
+      path: 'table',
+      name: 'Table',
+      component: _import('table/index'),
+      meta: { title: '表格', icon: 'table' }
+    },
+    {
+      path: 'tree',
+      name: 'Tree',
+      component: _import('tree/index'),
+      meta: { title: '树结构', icon: 'tree' }
+    }
+  ]
+}

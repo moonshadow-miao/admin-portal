@@ -1,0 +1,46 @@
+<template>
+  <div>
+    <Search :query="query">
+      <div slot="rol_first">
+        <el-form-item label="企业编号:">
+          <el-input></el-input>
+        </el-form-item>
+        <el-form-item label="计费号码:">
+          <el-input></el-input>
+        </el-form-item>
+      </div>
+      <div slot="rol_second">
+        <el-form-item label="企业名称:">
+          <el-input></el-input>
+        </el-form-item>
+      </div>
+      <div slot="rol_third">
+        <el-form-item label="联系人手机:">
+          <el-input></el-input>
+        </el-form-item>
+      </div>
+    </Search>
+  </div>
+</template>
+
+<script>
+  import {login} from '@/api/login'
+  import Search from '@/components/Search/Search'
+
+  export default {
+    name: "spManageIndex",
+    data() {
+      return {}
+    },
+    components: {Search},
+    methods: {
+      query(){
+
+      }
+    }
+  }
+</script>
+
+<style scoped>
+
+</style>

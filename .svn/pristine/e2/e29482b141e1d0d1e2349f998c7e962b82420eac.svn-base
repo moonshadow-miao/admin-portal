@@ -1,0 +1,31 @@
+<template>
+  <div>
+    <Search></Search>
+  </div>
+</template>
+
+<script>
+  import {login} from '@/api/login'
+  import Search from '@/components/Search/Search'
+  export default {
+    name: "spManageIndex",
+    data(){
+      return {
+
+      }
+    },
+    created(){
+      login('admin','696').then(res=>{
+        console.log(res)
+      })
+    },
+    components:{Search},
+    methods:{
+
+    }
+  }
+</script>
+
+<style scoped>
+
+</style>

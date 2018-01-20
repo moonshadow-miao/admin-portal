@@ -1,0 +1,356 @@
+<template>
+  <section class="spOpen-container">
+    <header>
+      <ul class="step">
+        <li v-for="(item,index) in headTitle" :key="index" :class="{'active':nextStep===item.value}">
+          <span>{{item.value}}</span>{{item.title}}
+        </li>
+      </ul>
+    </header>
+    <div class="content-container">
+      <el-form labelWidth="150px" size="small" v-if="nextStep===1">
+        <el-row :gutter="40">
+          <el-col :span="12">
+            <el-form-item label="企业全称">
+              <el-input></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="联系人姓名">
+              <el-input></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="企业类型">
+              <el-radio-group v-model="radioChecked">
+                <el-radio v-for="item in spType" :key="item.label" :label="item.label">{{item.text}}</el-radio>
+              </el-radio-group>
+            </el-form-item>
+
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="联系人手机号">
+              <el-input></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="证件类型">
+              <el-radio-group v-model="cardChecked">
+                <el-radio v-for="item in cradType" :key="item.label" :label="item.label">{{item.text}}</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="40" v-show="cardChecked==='1'">
+          <el-col :span="12">
+            <el-form-item label="统一社会信用代码">
+              <el-input placeholder="18位数字或者大写英文字母"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="营业执照">
+              <el-upload action="/">
+                <span style="margin-right:155px;">一张叫做营业执照的照片.JPG</span>
+                <el-button size="small" type="primary">点击上传</el-button>
+                <span slot="tip" class="el-upload__tip m-l-20">支持2M以内的PNG、JPG格式文件</span>
+              </el-upload>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="40" v-show="cardChecked==='2'">
+          <el-col :span="12">
+            <el-form-item label="税务登记号">
+              <el-input placeholder="15位数字或者大写英文字母"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="税务登记证">
+              <el-upload action="/">
+                <el-button size="small" type="primary">点击上传</el-button>
+                <span slot="tip" class="el-upload__tip m-l-20">支持2M以内的PNG、JPG格式文件</span>
+              </el-upload>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="营业执照注册号">
+              <el-input placeholder="15位数字或者大写英文字母"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="营业执照证">
+              <el-upload action="/">
+                <span style="margin-right:155px;">一张叫做营业执照的照片.JPG</span>
+                <el-button size="small" type="primary">点击上传</el-button>
+                <span slot="tip" class="el-upload__tip m-l-20">支持2M以内的PNG、JPG格式文件</span>
+              </el-upload>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="组织机构代码">
+              <el-input placeholder="9位数字或者大写英文字母"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="组织机构代码证">
+              <el-upload action="/">
+                <span style="margin-right:155px;">一张叫做营业执照的照片.JPG</span>
+                <el-button size="small" type="primary">点击上传</el-button>
+                <span slot="tip" class="el-upload__tip m-l-20">支持2M以内的PNG、JPG格式文件</span>
+              </el-upload>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="40">
+          <el-col :span="24">
+            <el-form-item label="其他证件">
+              <el-upload action="/">
+                <el-button size="small" type="primary">点击上传</el-button>
+                <span slot="tip" class="el-upload__tip m-l-20">支持2M以内的PNG、JPG格式文件</span>
+              </el-upload>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="备注">
+              <el-input type="textarea"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label=" ">
+             <el-button type="primary" @click="handleNext(2)">下一步</el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+
+      <el-form v-if="nextStep===2" labelWidth="150px" size="small">
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="所属渠道">
+              <Platform :showCity="true" :platform.sync="searchOptions.platform"  :city.sync="searchOptions.city" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="渠道商姓名">
+              <el-input></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="渠道商手机号">
+              <el-input></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="帜讯销售姓名">
+              <el-input></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="帜讯销售手机号">
+              <el-input></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label=" ">
+              <el-button @click="handleNext(1)">上一步</el-button>
+              <el-button type="primary" @click="handleNext(3)">下一步</el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+
+      <el-form v-if="nextStep===3" labelWidth="150px" size="small">
+        <el-row :gutter="40">
+          <el-col :span="12">
+            <el-form-item label="计费号码">
+              <el-input></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="同步成本">
+              <el-radio-group v-model="isCostSync">
+                <el-radio v-for="item in costSync" :key="item.label"  :label="item.label">{{item.text}}</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+
+        </el-row>
+        <el-row :gutter="40">
+          <el-col :span="12">
+            <el-form-item label="付费类型">
+              <el-radio-group v-model="isFeeType">
+                <el-radio v-for="item in feeType" :key="item.label"  :label="item.label">{{item.text}}</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="实时扣费">
+              <el-radio-group v-model="isFeeSync">
+                <el-radio v-for="item in feeSync" :key="item.label"  :label="item.label">{{item.text}}</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="账户类型">
+              <el-radio-group  v-model="isAccountType" v-if="isFeeType==='0'">
+                <el-radio v-for="item in accountType" :key="item.label"  :label="item.label">{{item.text}}</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label=" ">
+              <el-button @click="handleNext(2)">上一步</el-button>
+              <el-button type="primary" @click="handleNext(4)">下一步</el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+    </div>
+  </section>
+</template>
+
+<script>
+  import {Upload} from 'element-ui';
+  import Platform from '@/components/PlatformSelector/platformSelector';
+  export default {
+    name: "spOpenIndex",
+    data() {
+      return {
+        headTitle: [{
+          title: '企业信息',
+          value: 1
+        }, {
+          title: '渠道信息',
+          value: 2
+        }, {
+          title: '账户信息',
+          value: 3
+        }, {
+          title: '开户成功',
+          value: 4
+        }],
+        nextStep: 1,
+        radioChecked: '1',
+        spType: [{text: '正式', label: '1'}, {text: '体验', label: '2'}, {text: '测试', label: '3'}, {
+          text: '联通',
+          label: '4'
+        }],
+        cardChecked: '1',
+        cradType: [{text: '三证合一（一照一码）', label: '1'}, {text: '三证分离', label: '2'}],
+        searchOptions:{
+          platform:"",
+          city:''
+        },
+        isCostSync:'0',
+        costSync:[{text: '开启', label: '0'}, {text: '关闭', label: '1'}],
+        isFeeSync:'0',
+        feeSync:[{text: '开启', label: '0'}, {text: '关闭', label: '1'}],
+        isFeeType:'0',
+        feeType:[{text: '预付费', label: '0'}, {text: '后付费', label: '1'}],
+        isAccountType:'0',
+        accountType:[{text: '计收', label: '0'}, {text: '免收', label: '1'}]
+
+      }
+    },
+    components: {
+      'el-upload': Upload,Platform
+    },
+    methods:{
+      handleNext(val){
+        this.nextStep=val;
+      }
+    }
+  }
+</script>
+
+<style scoped lang='scss'>
+  .spOpen-container {
+    padding: 20px;
+    .step {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f7f7f7;
+      border-bottom: 1px solid #e9eced;
+      text-align: center;
+      overflow: hidden;
+      li {
+        height: 46px;
+        line-height: 46px;
+        flex: 1;
+        position: relative;
+        span {
+          display: inline-block;
+          width: 26px;
+          height: 26px;
+          font-size: 16px;
+          border-radius: 50%;
+          background-color: #f7f7f7;
+          line-height: 26px;
+          text-align: center;
+          color: #757575;
+          margin-right: 6px;
+          font-weight: bold;
+          border: 1px solid #BDBDBD;
+        }
+        &:before {
+          position: absolute;
+          right: -19px;
+          top: -2px;
+          content: '';
+          width: 0;
+          height: 0;
+          border-top: 25px solid transparent;
+          border-bottom: 25px solid transparent;
+          border-left: 18px solid #e9eced;
+          z-index: 1;
+        }
+        &:not(:last-child):after {
+          position: absolute;
+          right: -16px;
+          top: 0;
+          content: '';
+          width: 0;
+          height: 0;
+          border-top: 23px solid transparent;
+          border-bottom: 23px solid transparent;
+          border-left: 16px solid #f7f7f7;
+          z-index: 1;
+        }
+        &.active {
+          background-color: #2994dd;
+          border-right: none;
+          color: #FFFFFF;
+          span {
+            color: #2994dd;
+            background-color: #FFFFFF;
+            border: 1px solid #f6fafc;
+          }
+          &:after {
+            border-left: 16px solid #2994dd;
+          }
+        }
+      }
+    }
+    .content-container {
+      margin-top: 30px;
+      .el-form-item {
+        label {
+          text-align: center;
+        }
+      }
+
+    }
+  }
+</style>

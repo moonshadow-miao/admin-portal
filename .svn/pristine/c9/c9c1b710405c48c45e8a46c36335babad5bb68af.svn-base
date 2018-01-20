@@ -1,0 +1,26 @@
+import {param2Obj,success,error} from './utils'
+import {RETURN_CODE} from '../utils/constant'
+
+const userMap = {
+  admin: {
+    roles: ['admin'],
+    token: 'admin',
+    introduction: '我是超级管理员',
+    avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
+    name: 'Super Admin',
+    code: RETURN_CODE.SUCCESS
+  }
+}
+
+export default {
+  loginByUsername: config => {
+    const {username:{username}} = JSON.parse(config.body)
+    return username ? userMap[username] : error
+  },
+  getUserInfo: config => {
+    const {token} = param2Obj(config.url)
+    return token ? userMap[token] : error
+  },
+  logout: () => success
+}
+

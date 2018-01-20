@@ -1,0 +1,22 @@
+<template>
+  <div>
+  
+  </div>
+</template>
+<script>
+  import {getIndustries} from '@/api/common'
+  export default {
+    name: 'industries',
+    data() {
+      return {}
+    },
+    created() {
+      getIndustries().then(res=>console.log(res))
+    },
+    methods: {},
+    components: {}
+  }
+</script>
+<style lang='scss' scoped rel='stylesheet/scss' type='text/scss'>
+
+</style>
