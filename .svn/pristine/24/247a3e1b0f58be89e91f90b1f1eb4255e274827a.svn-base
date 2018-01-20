@@ -1,7 +1,0 @@
-export const RETURN_CODE = {
-  EXPIRED: '201',
-  SUCCESS: '200',
-  ILLEGAL: '202',
-  ERROR: '400'
-}
-

@@ -1,6 +1,6 @@
 <template>
   <scroll-bar>
-    <el-menu mode="vertical" class="menu" unique-opened :default-active="$route.meta && $route.meta.index" :collapse="isCollapse">
+    <el-menu ref="menu" mode="vertical" class="menu" unique-opened :default-active="$route.meta && $route.meta.index" :collapse="isCollapse">
       <sidebar-item :routes="routes"></sidebar-item>
     </el-menu>
   </scroll-bar>
@@ -21,6 +21,17 @@
       isCollapse() {
         return !this.sidebar.opened
       }
+    },
+    mounted(){
+      this.$nextTick(()=>{
+        IBSS.$on('openMenu',()=>{
+          let menuIndex = this.$route.matched[1].name
+          this.$refs.menu.open(menuIndex)
+        })
+      })
+    },
+    beforeDestroy(){
+      IBSS.$off('openMenu')
     }
   }
 </script>

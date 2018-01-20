@@ -1,11 +1,11 @@
 <template>
   <div class="table-list">
     <el-table @select="select" @select-all="selectAll" header-row-class-name="table-header" size="mini" :data="data" border style="width: 100%" cell-class-name="table-cell">
-      <el-table-column fixed v-if="selection" type="selection" min-width="40"></el-table-column>
+      <el-table-column :fixed="!isMobile" v-if="selection" type="selection" min-width="40" />
       <slot></slot>
     </el-table>
     <div class="table-page clearfix">
-      <el-pagination class="fr pagination" background @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[5,10,20,50,100,200]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="dataCount">
+      <el-pagination :small="isMobile" :class="{fr:!isMobile}" class="pagination" background @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[5,10,20,50,100,200]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="dataCount">
       </el-pagination>
     </div>
   </div>
@@ -17,6 +17,11 @@
     data() {
       return {
         currentPage: 1
+      }
+    },
+    computed:{
+      isMobile(){
+        return this.$store.state.common.isMobile
       }
     },
     props: {
@@ -68,10 +73,11 @@
   }
 
   .table-list {
-    padding: 0 10px;
+    padding: 10px;
   }
 
   .table-page {
     padding: 15px 20px;
+    overflow: auto;
   }
 </style>

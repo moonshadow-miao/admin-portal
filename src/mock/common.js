@@ -22,7 +22,7 @@ export default {
     return token ? userMap[token] : error
   },
   logout: () => success,
-  getIndustryList: (config) => ({
+  getIndustryList: () => ({
     code: RETURN_CODE.SUCCESS,
     data: industry
   }),

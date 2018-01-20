@@ -62,8 +62,8 @@
     </Centers>
     
     <List :selectList.sync="selectList" :selection="true" :data="tableData" @query="query" :dataCount="dataCount">
-      <el-table-column fixed prop="spCode" label="企业编号" min-width="80"></el-table-column>
-      <el-table-column fixed prop="spName" label="企业名称" min-width="140"></el-table-column>
+      <el-table-column :fixed="!$store.state.common.isMobile" prop="spCode" label="企业编号" min-width="80"></el-table-column>
+      <el-table-column :fixed="!$store.state.common.isMobile?false:'left'" prop="spName" label="企业名称" min-width="140"></el-table-column>
       <el-table-column label="省份/地市" min-width="110">
         <template slot-scope="{row:{platform,city}}">
           <span>{{platform +'/'+ city}}</span>
@@ -77,7 +77,7 @@
       <el-table-column label="企业状态" min-width="65">
         <template slot-scope="{row}">{{SP_STATUS[row.status]}}</template>
       </el-table-column>
-      <el-table-column fixed="right" class="text-center" label="操作" width="190">
+      <el-table-column :fixed="$store.state.common.isMobile?false:'right'" class="text-center" label="操作" width="190">
         <template slot-scope="{row}">
           <router-link :to="{name:'spEdit',params:{id:row.id}}">
             <el-button type="text" size="small">修改</el-button>

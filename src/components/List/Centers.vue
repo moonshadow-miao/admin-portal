@@ -21,8 +21,8 @@
 
 <style scoped  rel="stylesheet/scss" lang="scss">
   .center{
-    height: 53px;
-    padding: 10px 20px;
+    height: 43px;
+    padding: 10px 20px 0;
     .title{
       color: #006fbb;
       line-height: 32px;

@@ -1,4 +1,0 @@
-export default {
-  dev : (file,path) => require(`@/${path ? path :'views'}/${file}.vue`).default,
-  prod : (file,path) => () => import(`@/${path ? path :'views'}/${file}.vue`)
-}

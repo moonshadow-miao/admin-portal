@@ -36,7 +36,7 @@ export function Common_getIndustries(params) {
 
 export function Common_getPlatForm() {
   return request({
-    url: '/common/platfrom',
+    url: '/common/platform',
     method: 'get'
   })
 }

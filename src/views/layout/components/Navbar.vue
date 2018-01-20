@@ -1,8 +1,8 @@
 <template>
   <el-menu class="navbar" mode="horizontal" :class="{'isRetract':!sidebar.opened}">
-    <span @click="toggleSideBar" class="expand-menu" :class="sidebar.opened ?'el-icon-d-arrow-left':'el-icon-d-arrow-right'"></span>
+    <span @click="toggle" class="expand-menu" :class="sidebar.opened ?'el-icon-d-arrow-left':'el-icon-d-arrow-right'"></span>
     <breadcrumb v-if="!isMobile"></breadcrumb>
-    <el-dropdown class="tag-container" trigger="click">
+    <el-dropdown v-if="!isMobile" class="tag-container" trigger="click">
       <div class="avatar-wrapper">
         <svg-icon icon-class="menu" class="icon"></svg-icon>
         <i class="el-icon-caret-bottom"></i>
@@ -22,7 +22,7 @@
         <svg-icon icon-class="member" class="icon"></svg-icon>
         <i class="el-icon-caret-bottom"></i>
       </div>
-      <el-dropdown-menu class="user-dropdown" slot="dropdown">
+      <el-dropdown-menu class="user-dropdown w-80" slot="dropdown">
         <router-link to="/">
           <el-dropdown-item>
             首页
@@ -55,6 +55,12 @@
         this.$store.dispatch('common/logOut').then(() => {
           location.reload() // 为了重新实例化vue-router对象 避免bug
         })
+      },
+      toggle(){
+        this.toggleSideBar()
+        if(this.sidebar.opened){
+          IBSS.$emit('openMenu')
+        }
       },
       addViewTags() {
         const route = this.$route;
