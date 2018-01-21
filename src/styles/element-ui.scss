@@ -48,6 +48,9 @@ body .el-popper[x-placement^="bottom"] {
   .el-form-item__label{
     padding:  0 10px 0 0;
   }
+  .el-select{
+    width: 100%;
+  }
 }
 
 .pop-with-remark{

@@ -190,8 +190,7 @@
       dateLink() {
         this.$refs.endDate.focus()
       },
-      query(pageInfo = {curPage: 1,pageSize:10}) {
-        console.log(this.searchOptions);
+      query(pageInfo = {curPage: 1,pageLimit:10}) {
         Busi_spManage_getSpList(Object.assign(this.searchOptions, pageInfo)).then(({data, dataCount}) => {
           this.tableData = data
           this.dataCount = dataCount

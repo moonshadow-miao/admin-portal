@@ -56,3 +56,12 @@ export function Busi_spManage_batchChange(data) {
   })
 }
 
+// 获取变更记录列表
+export function Busi_spManage_getChangeList(params) {
+  return request({
+    url: '/sp/change-list',
+    method: 'get',
+    params,
+    loading: true
+  })
+}

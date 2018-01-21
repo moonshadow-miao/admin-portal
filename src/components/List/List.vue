@@ -1,11 +1,11 @@
 <template>
   <div class="table-list">
     <el-table @select="select" @select-all="selectAll" header-row-class-name="table-header" size="mini" :data="data" border style="width: 100%" cell-class-name="table-cell">
-      <el-table-column :fixed="!isMobile" v-if="selection" type="selection" min-width="40" />
+      <el-table-column :fixed="!isMobile" v-if="selection" type="selection" min-width="40"/>
       <slot></slot>
     </el-table>
     <div class="table-page clearfix">
-      <el-pagination :small="isMobile" :class="{fr:!isMobile}" class="pagination" background @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[5,10,20,50,100,200]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="dataCount">
+      <el-pagination :small="isMobile" :class="{fr:!isMobile}" class="pagination" background @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[5,10,20,50,100,200]" :page-size="pageLimit" layout="total, sizes, prev, pager, next, jumper" :total="dataCount">
       </el-pagination>
     </div>
   </div>
@@ -37,7 +37,7 @@
         type: Array,
         required: true
       },
-      pageSize: {
+      pageLimit: {
         type: Number,
         default: 10
       },
@@ -48,7 +48,7 @@
     },
     methods: {
       handleCurrentChange(val) {
-        this.$emit('query', {curPage: val,pageSize:this.pageSize})
+        this.$emit('query', {curPage: val,pageLimit:this.pageLimit})
       },
       selectAll(allData){
         let list =allData.map(item=>item.id)
