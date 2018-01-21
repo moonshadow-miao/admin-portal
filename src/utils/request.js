@@ -21,7 +21,9 @@ service.interceptors.request.use(config => {
   config.loading = config.loading === undefined ? false : config.loading;
   if (config.loading) {
     loadingInstance = Loading.service({
-      target: '.app-main'
+      target: '.app-main',
+      text:'拼命加载中~~~',
+      background:'transparent'
     })
   }
   return config
