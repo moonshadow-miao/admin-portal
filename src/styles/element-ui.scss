@@ -62,7 +62,7 @@ body .el-popper[x-placement^="bottom"] {
   }
 }
 
-.el-checkbox,body .el-checkbox + .el-checkbox {
+.el-checkbox-group .el-checkbox,body .el-checkbox + .el-checkbox {
   margin-left: 0;
   margin-right: 25px;
 }

@@ -36,7 +36,6 @@ export default {
         },
         {
           path: 'edit/:id',
-          index: '010101',
           name: 'spEdit',
           hidden: true,
           component: asyncImport('business/spManage/spEdit'),

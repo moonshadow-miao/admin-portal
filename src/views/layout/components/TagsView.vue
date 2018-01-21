@@ -2,7 +2,7 @@
   <div class="tags-view-container" v-show="showTag">
     <div class="tags-view-wrapper">
       <router-link ref='tag' class="tags-view-item" :class="isActive(tag)?'active':''" v-for="tag in cachedViews"
-                   :to="{name:tag.name}" :key="tag.name">
+                   :to="tag.path" :key="tag.name">
         {{tag.meta.title}}
         <span class='el-icon-close' @click.prevent.stop='closeSelectedTag(tag)'></span>
       </router-link>
