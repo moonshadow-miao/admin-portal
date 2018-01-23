@@ -18,7 +18,8 @@ service.interceptors.request.use(config => {
   if (store.getters.token) {
     config.headers['X-Token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
   }
-  config.loading = config.loading === undefined ? false : config.loading;
+  config.loading = config.loading === undefined ? false : config.loading
+  config.method = 'post'
   if (config.loading) {
     loadingInstance = Loading.service({
       target: '.app-main',
@@ -55,7 +56,7 @@ service.interceptors.response.use(
         })
       })
     }
-    Message({message: res.msg, type: 'error', duration: 2 * 1000})
+    Message({message: res.message, type: 'error', duration: 2 * 1000})
   },
   error => {
     loadingInstance && loadingInstance.close();

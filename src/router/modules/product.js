@@ -19,7 +19,7 @@ export default {
         {
           path: 'index',
           name: 'packageList',
-          component: asyncImport('form/index'),
+          component: asyncImport('product/index'),
           meta: { title: '套餐列表',menu: true, cache:true , index:'020101'}
         }
       ]

@@ -1,6 +1,6 @@
 <template>
   <div class="table-list">
-    <el-table @select="select" @select-all="selectAll" header-row-class-name="table-header" size="mini" :data="data" border style="width: 100%" cell-class-name="table-cell">
+    <el-table @select="select"  @select-all="selectAll" header-row-class-name="table-header" size="mini" :data="data"  style="width: 100%" cell-class-name="table-cell">
       <el-table-column :fixed="!isMobile" v-if="selection" type="selection" width="40"/>
       <slot></slot>
     </el-table>

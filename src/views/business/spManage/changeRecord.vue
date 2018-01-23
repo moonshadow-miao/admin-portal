@@ -11,8 +11,7 @@
       </div>
       <div slot="rol_second">
         <el-form-item label="变更时间:">
-          <el-date-picker @change="dateLink" popper-class="date" v-model="searchOptions.startTime" style="width:48%" value-format="yyyy-MM-dd" type="date" placeholder="开始日期"></el-date-picker>
-          <el-date-picker ref="endDate" popper-class="date" v-model="searchOptions.endTime" style="width:49%" value-format="yyyy-MM-dd" type="date" placeholder="结束日期"></el-date-picker>
+          <time-picker :startTime.sync="searchOptions.startTime" :endTime.sync="searchOptions.endTime" />
         </el-form-item>
         <el-form-item label="企业名称:">
           <el-input v-model="searchOptions.spName"></el-input>
@@ -55,6 +54,7 @@
 
 <script>
   import Platform from '@/components/PlatformSelector/platformSelector'
+  import TimePicker from '@/components/TimePicker/TimePicker.vue'
   import {Busi_spManage_getChangeList} from '@/api/business'
   import {SP_STATUS} from '@/utils/constant'
   const searchOptions = {
@@ -79,7 +79,7 @@
         SP_STATUS:SP_STATUS
       }
     },
-    components: {Platform},
+    components: {Platform,TimePicker},
     created() {
       this.query()
     },
@@ -88,7 +88,7 @@
         this.$refs.endDate.focus()
       },
       query(pageInfo = {curPage: 1,pageLimit:10}) {
-        Busi_spManage_getChangeList(Object.assign(this.searchOptions, pageInfo)).then(({data, dataCount}) => {
+        Busi_spManage_getChangeList(Object.assign(this.searchOptions, {queryInfo:pageInfo})).then(({data, dataCount}) => {
           this.tableData = data
           this.dataCount = dataCount
         })

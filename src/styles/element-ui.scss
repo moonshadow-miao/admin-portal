@@ -69,3 +69,18 @@ body .el-popper[x-placement^="bottom"] {
 .el-checkbox__label {
   font-size: 13px;
 }
+
+body .el-date-picker{
+  width: 280px;
+  .el-picker-panel__content{
+    margin: 0;
+    width: 100%;
+  }
+}
+body .el-date-range-picker{
+  width: 600px;
+}
+
+body .el-table{
+  border: 1px solid #ebeef5;
+}

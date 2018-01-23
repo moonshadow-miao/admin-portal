@@ -10,10 +10,10 @@ import 'element-ui/lib/theme-chalk/display.css';
 import '@/components'
 
 process.env.NODE_ENV === 'development' ? require('./mock') : null
-const isDebug_mode = process.env.NODE_ENV === 'development';
+const isDebug_mode = process.env.NODE_ENV === 'development'
 Vue.config.productionTip = false
-// Vue.config.debug = isDebug_mode;
-// Vue.config.devtools = isDebug_mode;
+Vue.config.debug = isDebug_mode
+Vue.config.devtools = isDebug_mode
 
 window.IBSS = new Vue({
   el: '#app',

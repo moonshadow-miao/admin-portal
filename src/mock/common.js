@@ -1,4 +1,3 @@
-import {param2Obj, success, error} from './utils'
 import {RETURN_CODE} from '../utils/constant'
 
 const userMap = {
@@ -18,7 +17,7 @@ export default {
     return username ? userMap[username] : error
   },
   getUserInfo: config => {
-    const {token} = param2Obj(config.url)
+    const {token} = JSON.parse(config.body)
     return token ? userMap[token] : error
   },
   logout: () => success,

@@ -67,4 +67,23 @@ export function setSession(key,data) {
   return window.localStorage.setItem(key,JSON.stringify(data))
 }
 
+// 根据省份 , 城市id获取城市名
+export function getCityAndPlatform(platId = '1',cityId) {
+  let platformList = getSession('platformList')
+  let citiesMap = getSession('citiesMap')
+  if(!citiesMap || !platformList ) return
+  let platformMap = platformList.find(item=>item.id === platId)
+  let cityMap = (citiesMap[platId] || citiesMap['1']).find(item=>item.code === cityId)
+  return {
+    platform:platformMap? platformMap.name :'无',
+    city: cityMap? cityMap.name :'无'
+  }
+}
+
+// 时间戳转字符串
+export function dateFormat(time) {
+  let date = new Date(time)
+  return date.getFullYear() + '-' + (date.getMonth() +1) + '- ' + date.getDate() + '  ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()
+}
+
 

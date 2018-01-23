@@ -1,8 +1,7 @@
 <template>
   <div class="platformSelector-contianer el-input el-input--small">
-    <input v-model="platformName" @input="search" @blur="blur" class="el-input__inner" @focus="isShow=true"
-           :style="{width:showCity?'49%':'100%'}"/>
-    <el-select style="width: 48%" v-model="city_id" v-if="showCity" @change="handelChange">
+    <input :disabled="preview" v-model="platformName" @input="search" @blur="blur" class="el-input__inner" @focus="isShow=true" :style="{width:showCity?'49%':'100%'}"/>
+    <el-select :disabled="preview" style="width: 48%" v-model="city_id" v-if="showCity" @change="handelChange">
       <el-option label="地市" value=""></el-option>
       <el-option v-for="item in citiesOption" :key="item.name" :label="item.name" :value="item.id"></el-option>
     </el-select>
@@ -90,7 +89,8 @@
       platform: {
         type: [String, Number],
         default: ''
-      }
+      },
+      preview: {type:Boolean,default:false}
     },
     watch: {
       city(newVal) {

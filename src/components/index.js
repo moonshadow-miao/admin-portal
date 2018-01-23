@@ -18,7 +18,6 @@ import {
   radio,
   col,
   datePicker,
-  timePicker,
   row,
   checkboxGroup,
   button,
@@ -28,14 +27,12 @@ import {
   tableColumn,
   loading,
   tag,
-  tree,
   pagination,
   MessageBox,
-  dialog,
-  alert
+  dialog
 } from 'element-ui'
 
-Vue.use(menu).use(submenu).use(menuItem).use(breadcrumb).use(breadcrumbItem).use(dropdown).use(dropdownMenu).use(dropdownItem).use(table).use(form).use(formItem).use(input).use(select).use(option).use(radio).use(col).use(datePicker).use(col).use(row).use(timePicker).use(checkboxGroup).use(button).use(checkbox).use(radioGroup).use(Switch).use(tableColumn).use(tag).use(loading.directive).use(tree).use(pagination).use(dialog).use(alert)
+Vue.use(menu).use(submenu).use(menuItem).use(breadcrumb).use(breadcrumbItem).use(dropdown).use(dropdownMenu).use(dropdownItem).use(table).use(form).use(formItem).use(input).use(select).use(option).use(radio).use(col).use(datePicker).use(col).use(row).use(checkboxGroup).use(button).use(checkbox).use(radioGroup).use(Switch).use(tableColumn).use(tag).use(loading.directive).use(pagination).use(dialog)
 Vue.prototype.$loading = loading.service
 Vue.prototype.$message = Message
 Vue.prototype.$prompt = MessageBox.prompt
