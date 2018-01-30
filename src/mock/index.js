@@ -14,14 +14,16 @@ Mock.mock(/\/user\/user/, 'post', commonAPI.getUserInfo)
 Mock.mock(/\/user\/logout/, 'post', commonAPI.logout)
 
 // 公共相关
-Mock.mock(/\/common\/industries/, 'post', commonAPI.getIndustryList)
-Mock.mock(/\/common\/platform/, 'post', commonAPI.getPlatform)
+// Mock.mock(/\/platform\/get-industry-types/, 'post', commonAPI.getIndustryList)
+// Mock.mock(/\/platform\/get-all-platform-and-channels/, 'post', commonAPI.getPlatform)
 
 // 业务受理相关 - 企业管理
 Mock.mock(/business\/sp-info\/get-sp-list/, 'post', businessAPI.getSpList)
 Mock.mock(/\/business\/update-sp-status/, 'post', businessAPI.freezeSp)
-Mock.mock(/\/sp\/batch-update/, 'post', businessAPI.batchFreezeSp)
-Mock.mock(/\/sp\/batch-change/, 'post', businessAPI.batchChange)
-Mock.mock(/\/sp\/change-sale/, 'post', businessAPI.changeSale)
+Mock.mock(/\/business\/sp-info\/update-sp-statuses/, 'post', businessAPI.batchFreezeSp)
+Mock.mock(/\/business\/sp-info\/update-sales/, 'post', businessAPI.batchChange)
 Mock.mock(/\/sp\/change-list/, 'post', businessAPI.getChangeList)
+
+// 业务受理相关 - 开户管理
+Mock.mock(/\/business\/sp-open\/get-acceptance-list/, 'post', businessAPI.getAcceptanceList)
 

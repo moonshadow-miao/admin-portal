@@ -53,9 +53,40 @@ export default {
         {
           path: 'index',
           name: 'spOpenIndex',
-          component: asyncImport('business/spOpen/index'),
-          meta: {title: '企业开户', menu: true, cache: true , index: '010201'}
-        }
+          component: asyncImport('business/openManage/index'),
+          meta: {title: '企业开户', cache: true , index: '010201'}
+        },
+        {
+          path: 'sp-notice',
+          name: 'spNoticeIndex',
+          component: asyncImport('business/openManage/spNotice'),
+          meta: {title: '企业通知', cache: true , index: '010202'}
+        },
+        {
+          path: 'apply-open',
+          name: 'applyOpenIndex',
+          component: asyncImport('business/openManage/applyOpen'),
+          meta: {title: '开户申请', cache: true , index: '010203'}
+        },
+        {
+          path: 'acceptance',
+          name: 'acceptance',
+          component: asyncImport('business/openManage/acceptance'),
+          meta: {title: '开销户受理单', cache: true , index: '010204'}
+        },
+        {
+          path: 'accept-record',
+          name: 'acceptRecord',
+          component: asyncImport('business/openManage/acceptRecord'),
+          meta: {title: '开销户受理单记录', cache: true , index: '010205'}
+        },
+        {
+          path: 'busi-config',
+          name: 'busiConfig',
+          hidden: true,
+          component: asyncImport('business/openManage/busiConfig'),
+          meta: {title: '业务配置', cache: true , index: '010204'}
+        },
       ]
     }
   ]

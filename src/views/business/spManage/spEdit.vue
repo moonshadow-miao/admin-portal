@@ -23,9 +23,9 @@
   </div>
 </template>
 <script>
-  import SpInfo from '../spOpen/components/SpInfo'
-  import AccountInfo from '../spOpen/components/AccountInfo'
-  import ChannelInfo from '../spOpen/components/ChannelInfo'
+  import SpInfo from '../openManage/components/SpInfo'
+  import AccountInfo from '../openManage/components/AccountInfo'
+  import ChannelInfo from '../openManage/components/ChannelInfo'
   
   export default {
     name: 'spEdit',

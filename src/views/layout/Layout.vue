@@ -20,10 +20,10 @@
     name: 'layout',
     components: {Navbar, Sidebar, AppMain, TagsView},
     computed: {
-      ...mapState('common',['sidebar','platformList','citiesMap'])
+      ...mapState('common',['sidebar','platformInfo'])
     },
     created () {
-      if(!this.platformList.length || JSON.stringify(this.citiesMap) ==='{}'){
+      if(!this.platformInfo.length){
         this.$store.dispatch('common/getPlatform')
       }
     }

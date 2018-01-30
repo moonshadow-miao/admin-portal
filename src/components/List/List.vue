@@ -51,12 +51,12 @@
         this.$emit('query', {curPage: val,pageLimit:this.pageLimit})
       },
       selectAll(allData){
-        let list =allData.map(item=>item.id)
-        this.$emit('update:selectList',list)
+        // let list =allData.map(item=>item.id)
+        this.$emit('update:selectList',allData)
       },
       select(data){
-        let list =data.map(item=>item.id)
-        this.$emit('update:selectList',list)
+        // let list =data.map(item=>item.id)
+        this.$emit('update:selectList',data)
       }
     }
   }

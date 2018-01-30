@@ -38,7 +38,7 @@
 
 <script>
   import {mapState,mapMutations,mapActions} from 'vuex'
-  import Breadcrumb from '@/components/Breadcrumb'
+  import Breadcrumb from './Breadcrumb'
   
   export default {
     components: {Breadcrumb},

@@ -7,7 +7,7 @@
 </template>
 
 <script>
-  import ScrollBar from '@/components/ScrollBar'
+  import ScrollBar from '../ScrollBar'
   import SidebarItem from './SidebarItem'
   export default {
     components: {SidebarItem, ScrollBar},

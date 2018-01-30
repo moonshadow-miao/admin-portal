@@ -2,20 +2,13 @@
   <div class="platformSelector-contianer el-input el-input--small">
     <input :disabled="preview" v-model="platformName" @input="search" @blur="blur" class="el-input__inner" @focus="isShow=true" :style="{width:showCity?'49%':'100%'}"/>
     <el-select :disabled="preview" style="width: 48%" v-model="city_id" v-if="showCity" @change="handelChange">
-      <el-option label="地市" value=""></el-option>
       <el-option v-for="item in citiesOption" :key="item.name" :label="item.name" :value="item.id"></el-option>
     </el-select>
     <div v-show="isShow">
       <div class="platformSelector" v-show="!showSearchTab">
         <div class="platformTab">
           <p class="tip">直接输入可搜索省份(支持汉字/以及首字母)</p>
-          <dl class="clearfix">
-            <dt>#</dt>
-            <dd>
-              <a value="" @click.stop="selectPlatform()">全国</a>
-            </dd>
-          </dl>
-          <dl v-for="(item ,key) in platformArr" :key="key" class="clearfix">
+          <dl v-for="(item ,key) in platformObj" :key="key" class="clearfix">
             <dt>{{key}}</dt>
             <dd>
               <a v-for="subItem in item" :key="subItem.id" :value="subItem.id" @click.stop="selectPlatform(subItem)">
@@ -28,7 +21,7 @@
       <div class="searchTab" v-show="showSearchTab">
         <ul class="platformslide mCustomScrollbar">
           <template v-if="searchList.length">
-            <li v-for="search in searchList" @click.stop="selectPlatform(search)" :key="search.id" @click=""><span>{{search.name}}</span><span class="fr">{{search.shortName}}</span>
+            <li v-for="search in searchList" @click.stop="selectPlatform(search)" :key="search.id"><span>{{search.name}}</span><span class="fr">{{search.shortName}}</span>
             </li>
           </template>
           <li v-else class="empty">对不起，没有找到 "<span style="color: red">{{platformName}}</span>"</li>
@@ -56,15 +49,16 @@
       }
     },
     computed:{
-      ...mapState('common',['platformList','citiesMap']),
-      platformArr(){
+      ...mapState('common',['platformInfo']),
+      platformObj(){
         const obj = {};
-        this.platformList.forEach((item) => {
-          const firstCharacter = (item.pinyin || item.shortName).slice(0, 1).toUpperCase();
+        this.platformInfo.forEach(({platformVo,channelVOes}) => {
+          const firstCharacter = (platformVo.pinyin || platformVo.shortName).slice(0, 1).toUpperCase();
+          platformVo.cities = channelVOes
           if (!obj[firstCharacter]) {
-            obj[firstCharacter] = [item];
+            obj[firstCharacter] = [platformVo];
           } else {
-            obj[firstCharacter].push(item);
+            obj[firstCharacter].push(platformVo);
           }
         });
         const sortObj = {};
@@ -74,7 +68,14 @@
             sortObj[key] = obj[key];
           }
         }
+        sortObj['Z'] = sortObj['Z'] || []
         return sortObj
+      },
+      platformList(){
+       return this.platformInfo.map(({platformVo,channelVOes}) => {
+          platformVo.cities = channelVOes
+          return platformVo
+        })
       }
     },
     props: {
@@ -84,11 +85,11 @@
       },
       city: {
         type: [String, Number],
-        default: ''
+        default: '3301'
       },
       platform: {
         type: [String, Number],
-        default: ''
+        default: '1'
       },
       preview: {type:Boolean,default:false}
     },
@@ -99,10 +100,18 @@
       platform(newVal) {
         this.platform_id = newVal
         if(!newVal){
-          return this.platformName="全国";
+          return this.platformName="";
         }
         this.platformName = this.platformList.find(item => item.id == newVal)['name'] || ''
-      },
+      }
+    },
+    async created(){
+      if(!this.platformInfo.length){
+        await this.$store.dispatch('common/getPlatform')
+      }
+      let platform = this.platform || '1'
+      let initPlatform = this.platformList.find(item=>item.id == platform)
+      this.selectPlatform(initPlatform)
     },
     methods: {
       blur() {
@@ -112,25 +121,12 @@
         }, 200)
       },
       selectPlatform(obj) {
-        if (!obj) {
-          obj = {
-            "id": "",
-            "status": "1",
-            "name": "全国",
-            "shortName": "#qg",
-            "regionId": "7",
-            "code": "",
-            "pinyin": "quanguo",
-            "type": "1",
-            "parentId": ""
-          };
-        }
         this.platformName = obj.name;
         this.platform_id = obj.id;
         this.$emit('update:platform', this.platform_id);
         if (this.showCity) {
           this.city_id = "";
-          this.citiesOption = this.citiesMap[obj.id];
+          this.citiesOption = obj.cities;
         }
       },
       handelChange() {
@@ -138,10 +134,6 @@
       },
       search() {
         this.platform_id="";
-        if (this.showCity) {
-          this.city_id = "";
-          this.citiesOption = this.citiesMap[this.platform_id];
-        }
         const name = this.platformName.toLowerCase()
         this.showSearchTab = name ? true : false
         if (!name) return

@@ -11,7 +11,7 @@
       </div>
       <div slot="rol_second">
         <el-form-item label="开户日期:">
-          <time-picker :startTime.sync="searchOptions.openStartTime" :endTime.sync="searchOptions.openEndTime" />
+          <time-picker :startTime.sync="searchOptions.openStartTime" :endTime.sync="searchOptions.openEndTime"/>
         </el-form-item>
         <el-form-item label="企业名称:">
           <el-input v-model="searchOptions.spName"></el-input>
@@ -65,7 +65,7 @@
       <el-table-column :fixed="!$store.state.common.isMobile?false:'left'" prop="spName" label="企业名称" min-width="140"></el-table-column>
       <el-table-column label="渠道" min-width="110">
         <template slot-scope="{row:{platform,city}}">
-          <span>{{getCityAndPlatform(platform,city)}}</span>
+          <span>{{(platform,city)}}</span>
         </template>
       </el-table-column>
       <el-table-column label="开户日期" min-width="140">
@@ -74,26 +74,41 @@
         </template>
       </el-table-column>
       <el-table-column label="企业类型" min-width="75">
-        <template slot-scope="{row:{spType}}">{{SP_TYPE[spType] || '无'}}</template>
+        <template slot-scope="{row:{cropType}}">{{SP_TYPE[cropType] || '无'}}</template>
       </el-table-column>
       <el-table-column prop="customerManagerName" label="帜讯销售" min-width="75"></el-table-column>
       <el-table-column label="企业状态" min-width="65">
         <template slot-scope="{row:{status}}">{{SP_STATUS[status]}}</template>
       </el-table-column>
       <el-table-column :fixed="$store.state.common.isMobile?false:'right'" class="text-center" label="操作" width="190">
-        <template slot-scope="{row}">
-          <router-link :to="{name:'spEdit',params:{id:row.spId}}">
-            <el-button type="text" size="small">修改</el-button>
-          </router-link>
-          <el-button @click="cancellation(row.spId)" type="text" size="small">销户</el-button>
-          <el-button @click="showUpdatePop(row.status == SP_STATUS_MAP.FREEZE ?SP_STATUS_MAP.NORMAL:SP_STATUS_MAP.FREEZE,row.spId)" type="text" size="small">{{row.status == SP_STATUS_MAP.FREEZE?'解冻':'冻结'}}
-          </el-button>
+        <template slot-scope="{row:{spId,status}}">
+          <template v-if="status == SP_STATUS_MAP.NORMAL">
+            <router-link :to="{name:'spEdit',params:{id:spId}}">
+              <el-button type="text" size="small">修改</el-button>
+            </router-link>
+            <el-button @click="cancellation(spId)" type="text" size="small">销户</el-button>
+            <el-button @click="showUpdatePop(SP_STATUS_MAP.FREEZE,spId)" type="text" size="small">冻结</el-button>
+          </template>
+          <template v-else-if="status == SP_STATUS_MAP.PRE_OPEN">
+            <router-link :to="{name:'spEdit',params:{id:spId}}">
+              <el-button type="text" size="small">修改</el-button>
+            </router-link>
+            <el-button @click="cancellation(spId)" type="text" size="small">销户</el-button>
+          </template>
+          <template v-else-if="status == SP_STATUS_MAP.FREEZE">
+            <router-link :to="{name:'spEdit',params:{id:spId}}">
+              <el-button type="text" size="small">修改</el-button>
+            </router-link>
+            <el-button @click="showUpdatePop(SP_STATUS_MAP.NORMAL,spId)" type="text" size="small">解冻</el-button>
+          </template>
+          <template v-else-if="status == SP_STATUS_MAP.CANCELLATION"></template>
         </template>
       </el-table-column>
     </List>
     
     <el-dialog custom-class="pop-with-remark" :visible.sync="dialogUpdate" width="30%">
-      <el-alert :closable="false" title="" :type="updatePop.type" :description="updatePop.description" show-icon></el-alert>
+      <el-alert :closable="false" title="" :type="updatePop.type" :description="updatePop.description"
+                show-icon></el-alert>
       <p class="p-5">{{updatePop.status == SP_STATUS_MAP.NORMAL ? '解冻' :SP_STATUS [upDateForm.status]}}原因 :</p>
       <el-input type="textarea" :rows="2" placeholder="请输入原因" v-model="upDateForm.remark">
       </el-input>
@@ -102,10 +117,10 @@
         <el-button @click="toUpdateStatus" type="primary">确 定</el-button>
       </span>
     </el-dialog>
-  
+    
     <el-dialog title="帜讯销售变更" center custom-class="pop-change-sale" :visible.sync="dialogChangeSale" width="30%">
       <el-form @submit.native.prevent="" ref="sale" :rules="rules" label-width="135px" :model="changeSaleForm">
-        <div style="line-height: 15px" class="p-l-20">{{saleInfo}}</div>
+        <div style="padding-left: 30px;font-size: 14px;line-height: 35px;">{{saleInfo}}</div>
         <el-form-item label="新帜讯销售姓名" prop="customerManagerName">
           <el-input v-model="changeSaleForm.customerManagerName"/>
         </el-form-item>
@@ -113,7 +128,7 @@
           <el-input v-model.number="changeSaleForm.customerManagerMdn"/>
         </el-form-item>
         <el-form-item label="变更原因" prop="remark">
-          <el-input type="textarea" :rows="2" placeholder="请输入原因" v-model="changeSaleForm.remark" />
+          <el-input type="textarea" :rows="2" placeholder="请输入原因" v-model="changeSaleForm.remark"/>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -125,30 +140,39 @@
 </template>
 
 <script>
-  import {Busi_spManage_getSpList,Busi_spManage_update,Busi_spManage_batchUpdate,Busi_spManage_batchChange,Busi_spManage_changSale} from '@/api/business'
+  import {
+    Busi_spManage_getSpList,
+    Busi_spManage_update,
+    Busi_spManage_batchUpdate,
+    Busi_spManage_batchChange
+  } from '@/api/business'
   import Platform from '@/components/PlatformSelector/platformSelector'
-  import {SP_STATUS, SP_STATUS_MAP,SP_TYPE} from '@/utils/constant'
-  import {getCityAndPlatform,dateFormat} from '@/utils/index'
+  import {Alert} from 'element-ui'
+  import Vue from 'vue'
+  import {SP_STATUS, SP_STATUS_MAP, SP_TYPE} from '@/utils/constant'
+  import {getCityAndPlatform, dateFormat} from '@/utils/index'
   import {validateMdn} from '@/utils/validate'
   import TimePicker from '@/components/TimePicker/TimePicker.vue'
   
+  Vue.use(Alert)
+  
   const searchOptions = {
-    spType: '',
+    spType : '',
     statuses: [],
     channelId: '',
     city: '',
-    openStartTime:'',
-    openEndTime:'',
-    customerManagerName:'',
-    customerManagerMdn:'',
-    spName:'',
-    spCode:'',
+    openStartTime: '',
+    openEndTime: '',
+    customerManagerName: '',
+    customerManagerMdn: '',
+    spName: '',
+    spCode: '',
   }
   const changeSaleForm = {
-    customerManagerName:'',
-    customerManagerMdn:'',
-    remark:'',
-    spIds:[]
+    customerManagerName: '',
+    customerManagerMdn: '',
+    remark: '',
+    spIds: []
   }
   
   export default {
@@ -157,46 +181,46 @@
       return {
         tableData: [],  // 列表数据
         dataCount: 0,   // 分页, 数据总数
-        selectList: [], // 选中项的id集合
-        searchOptions: Object.assign({},searchOptions),  // 搜索条件
+        selectList: [], // 选中项的集合
+        searchOptions: Object.assign({}, searchOptions),  // 搜索条件
         SP_STATUS: SP_STATUS,  // 企业状态集合
         SP_STATUS_MAP: SP_STATUS_MAP,  // 企业状态集合,
-        SP_TYPE:SP_TYPE, // 企业类型集合
+        SP_TYPE: SP_TYPE, // 企业类型集合
         dialogUpdate: false,  // 控制冻结销户操作的弹窗
-        dialogChangeSale:false,  // 控制变更记录弹窗
-        saleInfo:'',     // 销售弹窗的销售姓名和手机号
-        updatePop: {type: '', isAll:false , description: '', status: ''},  // 控制冻结销户弹窗的内容
+        dialogChangeSale: false,  // 控制变更记录弹窗
+        saleInfo: '',     // 销售弹窗的销售姓名和手机号
+        updatePop: {type: '', isAll: false, description: '', status: ''},  // 控制冻结销户弹窗的内容
         upDateForm: {   // 冻结销户操作的参数
           remark: '',
-          spId:'',
-          status:''
+          spId: '',
+          status: ''
         },
-        changeSaleForm: Object.assign({},changeSaleForm), // 变更销售的请求参数
+        changeSaleForm: Object.assign({}, changeSaleForm), // 变更销售的请求参数
         rules: {         // 变更销售表单验证规则
           customerManagerName: [
-            { required: true, message: '新帜讯销售姓名不能为空', trigger: 'blur' }
+            {required: true, message: '新帜讯销售姓名不能为空', trigger: 'blur'}
           ],
           customerManagerMdn: [
-            { trigger: 'blur',validator: validateMdn }
+            {trigger: 'blur', validator: validateMdn}
           ],
           remark: [
-            { required: true, message: '原因不能为空', trigger: 'blur' }
+            {required: true, message: '原因不能为空', trigger: 'blur'}
           ],
         },
-        getCityAndPlatform: (platId,cityId)=>{
-          let {platform = '',city = ''} = getCityAndPlatform(platId,cityId)
+        getCityAndPlatform: (platId, cityId) => {
+          let {platform = '', city = ''} = getCityAndPlatform(platId, cityId)
           return platform + '/' + city
         },
-        dateFormat:dateFormat
+        dateFormat: dateFormat
       }
     },
     created() {
       this.query()
     },
-    components: {Platform,TimePicker},
+    components: {Platform, TimePicker},
     methods: {
-      query(pageInfo = {curPage: 1,pageLimit:10}) {
-        Busi_spManage_getSpList(Object.assign(this.searchOptions, {queryInfo:pageInfo})).then(({data, dataCount}) => {
+      query(pageInfo = {curPage: 1, pageLimit: 10}) {
+        Busi_spManage_getSpList(Object.assign(this.searchOptions, {queryInfo: pageInfo})).then(({data, dataCount}) => {
           this.tableData = data
           this.dataCount = dataCount
         })
@@ -208,30 +232,32 @@
         }
         switch (type) {
           case 'freeze':
-            this.showUpdatePop(SP_STATUS_MAP.FREEZE,null,true);
+            this.showUpdatePop(SP_STATUS_MAP.FREEZE, null, true);
             break;
           case 'thaw':
-            this.showUpdatePop(SP_STATUS_MAP.NORMAL,null,true);
+            this.showUpdatePop(SP_STATUS_MAP.NORMAL, null, true);
             break;
           case 'changeSale':
             this.changeSale();
             break;
         }
       },
-      changeSale(){
-        Object.assign(this.changeSaleForm,changeSaleForm)
-        this.saleInfo =  `共选择了${this.selectList.length}家公司`
+      changeSale() {
+        Object.assign(this.changeSaleForm, changeSaleForm)
+        this.saleInfo = `共选择了${this.selectList.length}家公司`
         this.dialogChangeSale = true
-        this.$nextTick(()=>{this.$refs.sale.clearValidate()})
+        this.$nextTick(() => {
+          this.$refs.sale.clearValidate()
+        })
       },
-      async toChangeSale(){
+      async toChangeSale() {
         let valid = await this.$refs.sale.validate()
-        if(!valid) return
+        if (!valid) return
         let res = null
-        let param = Object.assign({}, this.changeSaleForm, {spIds: this.selectList})
+        let param = Object.assign({}, this.changeSaleForm, {spIds: this.selectList.map(item => item.spId)})
         res = await Busi_spManage_batchChange(param)
         if (!res) return
-        this.$message({message: res.msg, type: 'success'})
+        this.$message({message: res.message, type: 'success'})
         this.query()
         this.dialogChangeSale = false
       },
@@ -241,47 +267,56 @@
         this.updatePop = {
           type: 'warning',
           description: `此操作无法撤回！销户后，企业将无法再恢复正常状态，是否确定销户？`,
-          status:SP_STATUS_MAP.CANCELLATION,
-          isAll:false,
+          status: SP_STATUS_MAP.CANCELLATION,
+          isAll: false,
         }
-        Object.assign(this.upDateForm,{spId: id, operationType: SP_STATUS_MAP.CANCELLATION})
+        Object.assign(this.upDateForm, {spId: id, status: SP_STATUS_MAP.CANCELLATION})
       },
-      showUpdatePop(status, id ,isAll) {
+      showUpdatePop(status, id, isAll) {
         this.upDateForm.remark = ''
-        this.dialogUpdate = true
         let description = ''
-        if(isAll){
-          let freezeSpNum = this.tableData.filter(item=> this.selectList.indexOf(item.spId) !== -1 && item.status === SP_STATUS_MAP.FREEZE).length
-          let normalSpNum = this.tableData.filter(item=> this.selectList.indexOf(item.spId) !== -1 && item.status === SP_STATUS_MAP.NORMAL).length
+        if (isAll) {
+          let freezeSpNum = this.selectList.filter(item => item.status == SP_STATUS_MAP.FREEZE).length
+          let normalSpNum = this.selectList.filter(item => item.status == SP_STATUS_MAP.NORMAL).length
+          let restSpNum = this.selectList.length - (status == SP_STATUS_MAP.NORMAL ? freezeSpNum : normalSpNum)
+          if ((status == SP_STATUS_MAP.NORMAL && freezeSpNum === 0) || (status == SP_STATUS_MAP.FREEZE && normalSpNum === 0)) {
+            this.$message({message: `请至少选择一个状态为${status == SP_STATUS_MAP.NORMAL ? "冻结" : "正常"}的企业`, type: 'warning'});
+            return
+          }
           description = status == SP_STATUS_MAP.NORMAL ? `解冻后，企业将恢复一切业务操作,您总共选择了 ${this.selectList.length} 家企业，
-            其中有${freezeSpNum}家企业将被解冻, 有 ${normalSpNum} 家企业不做解冻操作，是否确认解冻？` : `冻结后，企业将不能进行任何业务操作，且不能登录一信通企业信息服务平台，您总共选择了${this.selectList.length} 家企业，其中有${normalSpNum}家企业将被冻结，有${freezeSpNum}家企业不做冻结操作.是否确认冻结？`
-        }else{
+            其中有${freezeSpNum}家企业将被解冻,  ${!restSpNum ? '' : '有' + restSpNum + '家企业不做解冻操作,'} 是否确认解冻？` : `冻结后，企业将不能进行任何业务操作，且不能登录一信通企业信息服务平台，您总共选择了${this.selectList.length} 家企业，其中有${normalSpNum}家企业将被冻结，${!restSpNum ? '' : '有' + restSpNum + '家企业不做冻结操作,'}是否确认冻结？`
+        } else {
           description = status == SP_STATUS_MAP.NORMAL ? '解冻后，企业将恢复一切业务操作，是否确认解冻？' : '冻结后，企业将不能进行任何业务操作，且不能登录一信通企业信息服务平台，是否确认冻结？'
         }
-        
+        this.dialogUpdate = true
         this.updatePop = {
           type: 'warning',
           description: description,
           status: status,
-          isAll:isAll,
+          isAll: isAll,
         }
-        Object.assign(this.upDateForm ,{spId: id, status: status})
+        Object.assign(this.upDateForm, {spId: id, status: status})
       },
       async toUpdateStatus() {
-        if(!this.upDateForm.remark){
+        if (!this.upDateForm.remark) {
           this.$message({message: '原因不能为空', type: 'warning'});
           return
         }
         let res = null
-        if(this.updatePop.isAll){
-          let param = Object.assign({},this.upDateForm,{spIds:this.selectList})
+        if (this.updatePop.isAll) {
+          let status = this.updatePop.status == SP_STATUS_MAP.NORMAL ? SP_STATUS_MAP.FREEZE : SP_STATUS_MAP.NORMAL
+          let spIds = this.selectList.reduce((prev, cur) => {
+            if (cur.status == status) prev.push(cur.spId)
+            return prev
+          }, [])
+          let param = Object.assign({}, this.upDateForm, {spIds: spIds})
           delete param.spId
           res = await Busi_spManage_batchUpdate(param)
-        }else {
+        } else {
           res = await Busi_spManage_update(this.upDateForm)
         }
-        if(!res) return
-        this.$message({message: res.msg, type: 'success'})
+        if (!res) return
+        this.$message({message: res.message, type: 'success'})
         this.query()
         this.dialogUpdate = false
       }
@@ -290,19 +325,19 @@
 </script>
 
 <style type="text/scss" lang="scss" rel="stylesheet/scss">
-  .pop-change-sale{
-    .el-dialog__header{
+  .pop-change-sale {
+    .el-dialog__header {
       padding-top: 15px;
       border-bottom: 1px solid #e9eced;
     }
-    .el-dialog__body{
+    .el-dialog__body {
       padding: 0 15px;
     }
-    .el-form-item{
+    .el-form-item {
       margin-bottom: 20px;
       padding-right: 10px;
     }
-    .el-dialog__footer{
+    .el-dialog__footer {
       padding-bottom: 20px;
       padding-top: 0;
     }

@@ -30,7 +30,7 @@ export const constantRouterMap = [
     hidden: true,
     children: [{
       path: 'dashboard',
-      component: asyncImport('dashboard/index')
+      component: asyncImport('login/dashboard')
     }]
   },
   business,

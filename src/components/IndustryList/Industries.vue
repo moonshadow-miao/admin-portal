@@ -12,7 +12,7 @@
         <ul class="clearfix" :style="{left:(moveDistance + 'px'),width:(maxLength * EACH_WIDTH + 'px')}">
           <li class="fl" v-for="(industry,index) in industries" :key="industry.parentId"
               :class="{active:index=== industrySelect}">
-            <span @click="selectIndustry(index)" class="cursor">{{industry.parentName}}</span>
+            <span @click="selectIndustry(index)" class="cursor">{{industry.name}}</span>
           </li>
         </ul>
       </div>
@@ -62,7 +62,7 @@
         return this.$store.state.common.industries.length + 1
       },
       subIndustries() {
-        return this.$store.state.common.industries.length && this.$store.state.common.industries[this.industrySelect]['childTypes'] || []
+        return this.$store.state.common.industries.length && this.$store.state.common.industries[this.industrySelect]['subTypes'] || []
       }
     },
     created() {

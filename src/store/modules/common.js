@@ -22,8 +22,7 @@ const common = {
     },
     cachedViews: [],
     currentView: '',
-    platformList: getSession('platformList') || [],
-    citiesMap: getSession('citiesMap') || {},
+    platformInfo: getSession('platformInfo') || [],
     industries: getSession('industries') || [],
   },
 
@@ -51,11 +50,9 @@ const common = {
     CHANGE_TAG: (state, status) => {
       state.showTag = status
     },
-    STORE_PLATFORM_AND_CITIES: (state, {platformList = [], citiesMap = {}}) => {
-      state.platformList = platformList
-      state.citiesMap = citiesMap
-      setSession('platformList', platformList)
-      setSession('citiesMap', citiesMap)
+    STORE_PLATFORM_AND_CITIES: (state,list) => {
+      state.platformInfo = list
+      setSession('platformInfo', list)
     },
     STORE_INDUSTRIES: (state, list) => {
       state.industries = list
@@ -128,12 +125,15 @@ const common = {
       })
     },
     getPlatform({commit}) {
-      Common_getPlatForm().then(({data}) => {
-        commit('STORE_PLATFORM_AND_CITIES', data)
+      return new Promise(resolve=>{
+        Common_getPlatForm().then(({data}) => {
+          commit('STORE_PLATFORM_AND_CITIES',data)
+          resolve()
+        })
       })
     },
     getIndustries({commit}) {
-      Common_getIndustries({a:20}).then(({data = []}) => {
+      Common_getIndustries().then(({data = []}) => {
         commit('STORE_INDUSTRIES', data)
       })
     }

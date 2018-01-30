@@ -28,5 +28,9 @@
       line-height: 32px;
       font-size: 14px;
     }
+    .el-button--small{
+      padding: 0 10px;
+      line-height: 32px;
+    }
   }
 </style>
