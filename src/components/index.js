@@ -40,4 +40,3 @@ Vue.prototype.$alert = MessageBox.alert
 
 Vue.component('Search', () => import('./Search/Search'))
 Vue.component('List', () => import('./List/List'))
-Vue.component('Centers', () => import('./List/Centers'))

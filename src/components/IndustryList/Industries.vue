@@ -12,7 +12,7 @@
         <ul class="clearfix" :style="{left:(moveDistance + 'px'),width:(maxLength * EACH_WIDTH + 'px')}">
           <li class="fl" v-for="(industry,index) in industries" :key="industry.parentId"
               :class="{active:index=== industrySelect}">
-            <span @click="selectIndustry(index)" class="cursor">{{industry.name}}</span>
+            <span @click="selectIndustry(index)" class="cursor">{{industry.parentName}}</span>
           </li>
         </ul>
       </div>
@@ -27,7 +27,7 @@
   </div>
 </template>
 <script>
-
+  
   export default {
     name: 'industries',
     data() {
@@ -62,7 +62,7 @@
         return this.$store.state.common.industries.length + 1
       },
       subIndustries() {
-        return this.$store.state.common.industries.length && this.$store.state.common.industries[this.industrySelect]['subTypes'] || []
+        return this.$store.state.common.industries.length && this.$store.state.common.industries[this.industrySelect]['childTypes'] || []
       }
     },
     created() {
@@ -95,6 +95,7 @@
     },
     watch: {
       checkedIndustries(list) {
+        list=list.map(item=>item.id)
         this.$emit('update:checkedList', list)
       },
       defaultList(list) {
@@ -107,11 +108,11 @@
 </script>
 <style lang='scss' scoped rel='stylesheet/scss' type='text/scss'>
   @import "src/styles/variables.scss";
-
+  
   .industries {
     display: inline-block;
   }
-
+  
   .tag {
     display: inline-block;
     margin-top: 2px;
@@ -124,14 +125,14 @@
     font-size: 12px;
     border-radius: 4px;
   }
-
+  
   .tag-panel {
     background-color: #f0f0f0;
     width: 800px;
     padding: 0 5px 5px 5px;
     position: relative;
   }
-
+  
   .industry-panel {
     height: 50px;
     line-height: 50px;
@@ -156,7 +157,7 @@
       }
     }
   }
-
+  
   .arrow {
     width: 20px;
     margin-top: 10px;
@@ -165,14 +166,14 @@
     line-height: 30px;
     position: absolute;
     height: 30px;
-    z-index: 10;
+    z-index: 9;
     background-color: #e6e6e6;
     &.el-icon-caret-right {
       text-align: right;
       right: 0;
     }
   }
-
+  
   .sub-industry {
     background-color: #fff;
     padding: 10px 10px 7px 10px;
@@ -184,7 +185,7 @@
       margin: 0 30px 5px 0;
     }
     .el-checkbox__label {
-      font-size: 13px;
+      font-size: 12px;
     }
   }
 </style>

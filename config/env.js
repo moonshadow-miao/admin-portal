@@ -3,13 +3,13 @@ const path = require('path')
 module.exports = {
   dev: {
     NODE_ENV: '"development"',
-    BASE_API: '"http://localhost:8687"'
+    BASE_API: '"http://localhost:9096"'
   },
   demo: {
     BASE_API: '"https://easy-mock.com/mock/5950a2419adc231f356a6636/vue-admin"'
   },
   test: {
-    BASE_API: '"http://localhost:8687"',
+    BASE_API: '"http://localhost:9096"',
     config: {
       index: path.resolve(__dirname, '../server/dist/index.html'),
       assetsRoot: path.resolve(__dirname, '../server/dist'),

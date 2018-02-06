@@ -7,7 +7,7 @@ export default {
   component: Layout,
   redirect: '/business/sp-manage/index',
   name: 'business',
-  meta: {title: '业务受理', icon: 'example'},
+  meta: {title: '业务受理', icon: 'menu_business'},
   children: [
     {
       path: 'sp-manage',
@@ -23,16 +23,10 @@ export default {
           meta: {title: '企业列表', cache: true, index: '010101'}
         },
         {
-          path: 'user',
-          name: 'userList',
-          component: asyncImport('business/spManage/userList'),
-          meta: {title: '用户列表', cache: true, index: '010102'}
-        },
-        {
           path: 'change-record',
           name: 'changeRecord',
           component: asyncImport('business/spManage/changeRecord'),
-          meta: {title: '变更记录', cache: true, index: '010103'}
+          meta: {title: '变更记录', cache: true, index: '010102'}
         },
         {
           path: 'edit/:id',

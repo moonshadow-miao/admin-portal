@@ -1,9 +1,21 @@
+@import "variables.scss";
 #app {
   .menu{
+    .svg-icon{
+      vertical-align: -6px;
+      font-size: 18px;
+    }
     .el-submenu__title,.el-menu-item{
-      line-height: 28px;
-      height: 31px;
-      font-size: 13px;
+      line-height: 38px;
+      height: 40px;
+      font-size: 12px;
+    }
+    .el-submenu__title{
+      .svg-icon + span {
+        font-weight: bold;
+        font-size: 14px;
+        color: #545b63;
+      }
     }
   }
   // 主体区域
@@ -15,11 +27,12 @@
     padding-top: 60px
   } // 侧边栏
   .sidebar-container {
+    border-right:1px solid #EAEAEA ;
     transition: width 0.28s;
-    width: 185px!important;
+    width: 180px!important;
     height: 100%;
     position: fixed;
-    top: 0;
+    top: 60px;
     bottom: 0;
     left: 0;
     z-index: 1001;
@@ -37,11 +50,24 @@
   }
   .hideSidebar {
     .sidebar-container,.sidebar-container .el-menu {
-      width: 36px!important;
-      // overflow: inherit;
+      width: 50px!important;
     }
     .main-container {
       margin-left: 36px;
+    }
+    .scroll-container .expand {
+      width: 50px!important;
+    }
+    .menu_search .el-input--suffix .el-input__inner {
+      padding-left: 30px!important;
+      padding-right: 0!important;
+      width: 30px!important;
+    }
+    .el-input__suffix {
+      right: 2px!important;
+    }
+    .menu-wrapper .el-submenu > .el-submenu__title {
+      padding-left: 18px!important;
     }
   }
   .hideSidebar {
@@ -54,6 +80,8 @@
         overflow: hidden;
         visibility: hidden;
         transition: opacity .3s cubic-bezier(.55, 0, .1, 1);
+        font-size: 14px;
+        font-weight: bold;
         opacity: 0;
         display: inline-block;
       }
@@ -70,7 +98,6 @@
           text-align: left;
           text-indent: 20px;
           top: 0px;
-          background-color: $subMenuBg!important;
           opacity: 1;
         }
       }
@@ -98,12 +125,15 @@
   .nest-menu .el-submenu>.el-submenu__title,
   .el-submenu .el-menu-item {
     min-width: 180px!important;
-    background-color: $subMenuBg!important;
+    background-color: $menuBg!important;
   }
-  .el-menu-item:hover,.el-menu-item.is-active {
+  .el-menu-item,.el-submenu__title:hover{
+    color: #545b63!important;
+    background-color: #F1F1F5!important;
+  }
+  .el-menu-item.is-active {
     min-width: 180px!important;
-    background-color: $menuHover!important;
-    color:#fff
+    color:$textColor!important;
   }
   .el-menu--collapse .el-menu .el-submenu{
     min-width: 180px!important;

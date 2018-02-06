@@ -25,7 +25,7 @@ export const constantRouterMap = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
+    redirect: '/business/sp-manage/index',
     name: 'Dashboard',
     hidden: true,
     children: [{

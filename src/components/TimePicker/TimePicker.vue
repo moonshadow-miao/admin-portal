@@ -1,6 +1,6 @@
 <template>
   <div class="time" @click.stop="">
-    <div @click="showTimePick" class="value cursor p-l-5"><span>{{timeValue}}</span><span v-show="timeValue.length" @click.stop="empty" class="fr close p-r-5 el-icon-close"></span></div>
+    <div @click="showTimePick" class="value cursor p-l-15"><span>{{timeValue}}</span><span v-show="timeValue.length" @click.stop="empty" class="fr close p-r-5 el-icon-close"></span></div>
     <div v-show="showTab" class="content">
       <div class="time-tab clearfix">
         <div class="fl text-center" :class="{active:mode==='m'}" @click="changeMode('m')">按月</div>

@@ -4,26 +4,38 @@ import {getSession, setSession} from '@/utils/index'
 import Cookies from 'js-cookie'
 import {Message, MessageBox} from 'element-ui'
 
+window.PLATFORM = {}
+window.CITY_MAP = {}
+
 const isMobile = /Android|webOS|iPhone|iPod|BlackBerry|iPad/i.test(navigator.userAgent)
 const initUser = {
-  name: '',
+  name: '孙立明',
   avatar: '',
   roles: [],
 }
+
+const getPlatform = (list) => {
+  if(!list || !list.length) return
+  list.forEach(item=>{
+    PLATFORM[item.platformVo.id] = item.platformVo.name
+    if(item.platformVo.id != '1'){
+      item.channelVOes.forEach(city=>{
+        CITY_MAP[city.id] = city.name
+      })
+    }
+  })
+}
+
+getPlatform(getSession('platformInfo'))
+
 const common = {
   namespaced: true,
   state: {
     token: getToken(),
     user: Object.assign({}, initUser),
-    isMobile: isMobile,
-    showTag: false,
-    sidebar: {
-      opened: !isMobile && !+Cookies.get('sidebarStatus')
-    },
-    cachedViews: [],
-    currentView: '',
     platformInfo: getSession('platformInfo') || [],
     industries: getSession('industries') || [],
+    menuIsExpand:!isMobile && !!+Cookies.get('sidebarStatus')
   },
 
   mutations: {
@@ -33,38 +45,22 @@ const common = {
     REMOVE_USER: (state) => {
       state.user = Object.assign(state.user, initUser)
     },
-    ADD_CACHED_VIEWS: (state, route) => {
-      if (state.cachedViews.findIndex(item => item.name === route.name) !== -1) return
-      if (state.cachedViews.length >= 5) {
-        state.cachedViews.shift()
-      }
-      state.cachedViews.push(route)
-    },
-    DEL_CACHED_VIEWS: (state, view) => {
-      if (state.cachedViews.length <= 1) return
-      let index = state.cachedViews.findIndex(item => item.name === view)
-      if (index !== -1) {
-        state.cachedViews.splice(index, 1)
-      }
-    },
-    CHANGE_TAG: (state, status) => {
-      state.showTag = status
-    },
     STORE_PLATFORM_AND_CITIES: (state,list) => {
       state.platformInfo = list
       setSession('platformInfo', list)
+      getPlatform(list)
     },
     STORE_INDUSTRIES: (state, list) => {
       state.industries = list
       setSession('industries', list)
     },
-    TOGGLE_SIDEBAR: state => {
-      if (state.sidebar.opened) {
-        Cookies.set('sidebarStatus', 1)
-      } else {
+    TOGGLE_MENU: state => {
+      if (state.menuIsExpand) {
         Cookies.set('sidebarStatus', 0)
+      } else {
+        Cookies.set('sidebarStatus', 1)
       }
-      state.sidebar.opened = !state.sidebar.opened
+      state.menuIsExpand = !state.menuIsExpand
     },
   },
 
@@ -72,14 +68,19 @@ const common = {
     // 登录
     login({commit}, userInfo) {
       return new Promise((resolve) => {
-        Common_login(userInfo).then(response => {
-          setToken(response.token)
-          commit('SET_USER', response)
-          Message({message: '登录成功!', type: 'success', duration: 2 * 1000})
-          resolve()
-        }).catch(err => {
-          Message({message: err.message, type: 'error', duration: 2 * 1000})
-        })
+        let response = {"roles":["admin"],"token":"admin","name":"孙立明"}
+        setToken(response.token)
+        commit('SET_USER', response)
+        Message({message: '登录成功!', type: 'success', duration: 2 * 1000})
+        resolve()
+        // Common_login(userInfo).then(response => {
+        //   setToken(response.token)
+        //   commit('SET_USER', response)
+        //   Message({message: '登录成功!', type: 'success', duration: 2 * 1000})
+        //   resolve()
+        // }).catch(err => {
+        //   Message({message: err.message, type: 'error', duration: 2 * 1000})
+        // })
       })
     },
     // 获取用户信息
@@ -107,21 +108,6 @@ const common = {
         commit('SET_TOKEN', '')
         removeToken()
         resolve()
-      })
-    },
-    addView({commit, state}, route) {
-      if (!state.showTag) return Promise.resolve()
-      return new Promise((resolve) => {
-        commit('ADD_CACHED_VIEWS', route)
-        resolve()
-      })
-    },
-    delView({commit, state}, view) {
-      return new Promise((resolve) => {
-        let index = state.cachedViews.findIndex(item => item.name === view)
-        index = index === 0 ? 0 : index - 1
-        commit('DEL_CACHED_VIEWS', view)
-        resolve(state.cachedViews[index])
       })
     },
     getPlatform({commit}) {

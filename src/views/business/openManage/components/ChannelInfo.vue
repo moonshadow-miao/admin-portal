@@ -1,19 +1,20 @@
 <template>
-  <el-form labelWidth="150px" size="small" :model="formData">
+  <el-form labelWidth="150px" size="small" :model="formData" ref="channelInfoForm" :rules="ruleForm">
     <el-row>
       <el-col :span="12">
-        <el-form-item label="所属渠道">
-          <Platform :preview="preview==='preview'" :showCity="true" :platform.sync="formData.platform" :city.sync="formData.city"/>
+        <el-form-item label="所属渠道" prop="city">
+          <Platform :preview="preview==='preview'" :showCity="true" :platform.sync="formData.channelId"
+                    :city.sync="formData.city"/>
         </el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-form-item label="渠道商姓名">
-          <el-input :disabled="preview==='preview'" v-model="formData.saleName"></el-input>
+        <el-form-item label="渠道商姓名" prop="name">
+          <el-input :disabled="preview==='preview'" v-model="formData.name"></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-form-item label="渠道商手机号">
-          <el-input :disabled="preview==='preview'" v-model="formData.saleMdn"></el-input>
+        <el-form-item label="渠道商手机号" prop="mdn">
+          <el-input :disabled="preview==='preview'" v-model="formData.mdn"></el-input>
         </el-form-item>
       </el-col>
     </el-row>
@@ -28,28 +29,121 @@
   </el-form>
 </template>
 
+
 <script>
   import Platform from '@/components/PlatformSelector/platformSelector';
-  import editMixin from '../../spManage/components/editMixin'
+  import editMixin from '../../spManage/components/editMixin';
+  import {
+    Busi_get_spInfo,
+    Busi_add_channelInfo
+  } from '@/api/business';
+
   export default {
     name: "channelInfo",
     data() {
+      const validateCity = (rule, value, callback) => {
+        if (!this.formData.channelId) {
+          //return callback(new Error('请选择渠道'));
+        }
+        if (!value) {
+          return callback(new Error('请选择城市'));
+        }
+        callback();
+      };
       return {
         formData: {
-          platform: '',
-          city: '',
-          saleName: '',
-          saleMdn: '',
-          customerManagerName: '',
-          customerManagerMdn: ''
+          spId: '',//企业id
+          channelId: '', //省份
+          city: '', // 城市
+          name: '', //渠道销售名字
+          mdn: ''//渠道销售手机号
+        },
+        ruleForm: {
+          city: [{validator: validateCity}],
+          name:[{message:'请填写渠道商姓名',required:true}],
+          mdn:[{message:'渠道商手机号',required:true}]
         }
       }
     },
-    mixins:[editMixin],
+    mixins: [editMixin],
     components: {Platform},
+    created() {
+      this.$nextTick(() => {
+        IBSS.$on('getSpId', (spId) => {
+          this.spId = spId;
+        })
+      });
+    },
+    beforeDestroy() {
+      IBSS.$off('getSpId')
+    },
     methods: {
       next(step) {
         //this.$emit('handleNext', step)
+       // this.spId = '18020210045620000136';
+        if (step == 1) {
+          const spId = this.spId;
+          Busi_get_spInfo({spId}).then((res) => {
+            const data = res.data;
+            const {spName, contactName, contactPhone, customerManagerName, customerManagerMdn, area, email, telephone, mobile, address, zipCode, industryType, description, certificationType} = data.enterpriseVO;
+            const customerManagerPhone=customerManagerMdn;
+            const spType = data.enterpriseVO.cropType;
+            const attributes = data.enterpriseVO.attributes || [];
+            const agentName = attributes[0].attrValue;
+            const agentCertificateType = attributes[1].attrValue;
+            const agentCertificateNumber = attributes[2].attrValue;
+            const industrys =industryType.split(',');//["1102", "1001"]
+            const userVO = data.userVO;
+            const administratorName = userVO.name;
+            const administratorPassword = userVO.passWord;
+            const administratorMoblie = userVO.mobile;
+            const isValidate = false;
+            if (certificationType === 1) {
+
+            } else if (certificationType === 3) {
+
+            }
+            this.$emit('handleNext', step, {
+              spName,
+              contactName,
+              contactPhone,
+              spType,
+              customerManagerName,
+              customerManagerPhone,
+              area,
+              email,
+              telephone,
+              mobile,
+              address,
+              zipCode,
+              description,
+              agentCertificateType,
+              agentName,
+              agentCertificateNumber,
+              industrys,
+              administratorName,
+              administratorPassword,
+              administratorMoblie,
+              isValidate,
+              spId
+            }, {certificationType})
+          })
+        } else {
+          this.formData.spId = this.spId;
+          this.$refs.channelInfoForm.validate((valid)=>{
+            if(!valid){
+              return;
+            }
+            Busi_add_channelInfo(this.formData).then((res) => {
+              if(res.code===200){
+                this.$refs.channelInfoForm.resetFields();
+                IBSS.$emit('getId', res.data.id, this.spId);
+                this.$emit('handleNext', step);
+              }
+
+            });
+          });
+        }
       },
     }
   }

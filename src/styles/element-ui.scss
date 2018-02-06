@@ -62,10 +62,6 @@ body .el-popper[x-placement^="bottom"] {
   }
 }
 
-.el-checkbox-group .el-checkbox,body .el-checkbox + .el-checkbox {
-  margin-left: 0;
-  margin-right: 25px;
-}
 .el-checkbox__label {
   font-size: 13px;
 }
@@ -83,4 +79,37 @@ body .el-date-range-picker{
 
 body .el-table{
   border: 1px solid #ebeef5;
+}
+body .el-dialog__wrapper {
+  .el-dialog__header {
+    padding-top: 15px;
+    border-bottom: 1px solid #e9eced;
+  }
+
+  .el-dialog__body {
+    padding: 10px 15px;
+  }
+
+  .el-form-item {
+    margin-bottom: 20px;
+    padding-right: 10px;
+  }
+
+  .el-dialog__footer {
+    padding-bottom: 10px;
+    padding-top: 0;
+  }
+
+  .el-dialog__title{
+    line-height: 14px;
+    font-size: 14px;
+  }
+
+  .el-dialog__headerbtn {
+    top: 12px;
+  }
+}
+
+.dialog-footer .el-button {
+  padding: 8px 15px;
 }

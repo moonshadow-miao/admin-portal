@@ -70,22 +70,21 @@ export default {
   getAcceptanceList(config){
     let param = JSON.parse(config.body)
     console.log('%c请求参数 :', 'color:green', param,config.url.match(/\/[\w-]+\/[\w-]+\b$/)[0])
-    return param ? Object.assign(mock({
-      ["data|10"]: [
-        {
-          acceptanceNo:Random.id(),
-          operator: Random.cname(),
-          cTime: new Date().getTime(),
-          spCode: Random.zip(),
-          feeMdn: Random.id(),
-          platform: Random.province(),
-          remark: Random.cparagraph(1),
-          ...mock({"attrName|1": ["2", "0", "1", "3", "4"]}),
-          ...mock({"attrFromValue|1": ["2", "0", "1", "3", "4"]}),
-          ...mock({"attrToValue|1": ["2", "0", "1", "3", "4"]}),
-        }
-      ]
-    }), {code: RETURN_CODE.SUCCESS, dataCount: 117}) : error
+    let data = Array(10).fill(1).map(() => ({
+      spId: Random.id(),
+      acceptanceNo: Random.integer(100000, 999999),
+      createTime: new Date().getTime(),
+      spName: Random.ctitle(),
+      contactName: Random.cname(),
+      feeMdn: '15571412121',
+      operatorName: Random.cname(),
+      description: Random.ctitle(),
+      ...mock({"spCode|100001-999999": 100001}),
+      ...mock({"channelId|1-33": 1}),
+      ...mock({"type|1": ["2", "0", "1", "3","4"]}),
+      ...mock({"status|1": ["0000","0001","0002","0003","0004","0005","0006","0007","0008","0009","0010","0011"]})
+    }))
+    return param ? Object.assign({data}, {code: RETURN_CODE.SUCCESS, dataCount: 152}) : error
   }
 }
 

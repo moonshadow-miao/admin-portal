@@ -1,8 +1,10 @@
 <template>
   <div class="scroll-container" ref="scrollContainer" @wheel.prevent="handleScroll">
     <div class="logo">
-      <input type="text" placeholder="搜索：导航菜单" @input="handleSearch" v-model="searchContent">
-      <div class="search-list">
+      <div class="menu_search">
+        <el-input size="mini" suffix-icon="el-icon-search" @change="showSearch = false" @blur="showSearch = false" @focus="handleSearch" @input="handleSearch" v-model="searchContent" placeholder="搜索：导航菜单"></el-input>
+      </div>
+      <div class="search-list" v-show="showSearch">
         <ul v-if="searchList.length>0">
           <li v-for="item in searchList" :key="item.path" @click="handleJump(item)" class="overflow-ellipsis">
             {{item.name}}
@@ -16,6 +18,14 @@
     <div class="scroll-wrapper" ref="scrollWrapper" :style="{top: top + 'px'}">
       <slot></slot>
     </div>
+    <div class="expand clearfix">
+      <div @click="expand" v-show="menuIsExpand">
+        <svg-icon class="fr icon" icon-class="menu_expand"></svg-icon>
+      </div>
+      <div @click="expand" v-show="!menuIsExpand">
+        <svg-icon class="fr icon" icon-class="menu_close"></svg-icon>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -28,7 +38,13 @@
       return {
         top: 0,
         searchList: [],
-        searchContent: ''
+        searchContent: '',
+        showSearch:false
+      }
+    },
+    computed:{
+      menuIsExpand(){
+        return this.$store.state.common.menuIsExpand
       }
     },
     methods: {
@@ -52,10 +68,14 @@
           }
         }
       },
-      handleSearch(e) {
+      handleSearch() {
         this.searchList = [];
-        const value = e.target.value;
-        this.searchContent = value;
+        this.showSearch = true
+        const value =  this.searchContent
+        if(!value){
+          this.showSearch = false
+          return
+        }
         const routes = this.$router.options.routes;
         const filterPath = (item, path) => {
           path += '/' + item.path;
@@ -80,6 +100,12 @@
         this.$router.push(item.path);
         this.searchList = [];
         this.searchContent = "";
+      },
+      expand(){
+        this.$store.commit('common/TOGGLE_MENU')
+        if(!this.menuIsExpand){
+          IBSS.$emit('openMenu')
+        }
       }
     }
   }
@@ -87,7 +113,6 @@
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import 'src/styles/variables.scss';
-
   .scroll-container {
     position: relative;
     width: 100%;
@@ -96,54 +121,80 @@
     .scroll-wrapper {
       position: absolute;
       width: 100% !important;
-      margin-top: 116px;
+      margin-top: 43px;
     }
     .logo {
-      background: url('http://res.test.ums86.com/6admin/img/com/logo.png') no-repeat center 25px/140px 41px #2994dd;
-      height: 116px;
+      padding: 5px 10px;
+      height: 42px;
       width: 100%;
       position: relative;
+      border-bottom: 1px solid $borderColor;
       color: #fff;
       input {
         width: 100%;
         height: 30px;
-        color: #fff;
-        background-color: #177dc2;
-        position: absolute;
-        left: 0;
-        bottom: 5px;
+        background-color: #fff;
         padding-left: 20px;
-        &::-webkit-input-placeholder {
-          color: ghostwhite;
-        }
       }
       .search-list {
-        background-color: #177dc2;
-        border-top: 2px solid #2994dd;
+        background-color: #fff;
         position: absolute;
-        top: 112px;
-        width: 100%;
-        z-index: 1000;
+        border: 1px solid $borderColor;
+        top: 41px;
+        width: 160px;
+        z-index: 100;
         ul {
-          margin: 0 20px;
+          padding: 6px 0;
+          position: relative;
+          z-index: 11;
+          &:before{
+            position: absolute;
+            content: '';
+            border: 1px solid $borderColor;
+            width: 6px;
+            height: 6px;
+            border-bottom: none;
+            border-right: none;
+            top: -5px;
+            left: 22px;
+            background-color: #fff;
+            transform: rotate(45deg);
+          }
           li {
-            border-bottom: 1px solid #2e8dce;
-            line-height: 30px;
-            height: 30px;
+            padding-left: 20px;
+            line-height: 34px;
+            height: 34px;
             cursor: pointer;
+            color: #616161;
+            font-size: 12px;
+            &:hover {
+              color: $textColor;
+              background-color: $menuBg;
+            }
           }
           .label {
             padding: 3px 1px;
             font-size: 12px;
-            text-shadow: none;
             background-color: #e6e6e6;
             font-weight: normal;
-            color: #626262;
             white-space: nowrap;
             border-radius: .25em;
             margin-left: 5px;
           }
         }
+      }
+    }
+    .expand{
+      position: fixed;
+      z-index: 101;
+      bottom: 0;
+      width: 180px;
+      height: 35px;
+      border-top:1px solid #EAEAEA ;
+      .icon{
+        cursor: pointer;
+        font-size: 20px;
+        margin-top: 7px;
       }
     }
   }

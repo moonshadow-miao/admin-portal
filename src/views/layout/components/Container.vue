@@ -1,6 +1,6 @@
 <template>
   <transition name="fade" mode="out-in">
-    <keep-alive :include="cachedRule">
+    <keep-alive>
       <router-view></router-view>
     </keep-alive>
   </transition>
@@ -9,11 +9,6 @@
 <script>
   export default {
     name: "container",
-    computed:{
-      cachedRule(){
-        return this.$store.getters.cachedRule
-      }
-    }
   }
 </script>
 

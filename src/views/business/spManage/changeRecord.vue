@@ -1,15 +1,15 @@
 <template>
   <div>
     <Search @query="query">
-      <div slot="rol_first">
+      <div slot="rol_1">
         <el-form-item label="渠道:">
           <Platform :platform.sync="searchOptions.platform" :city.sync="searchOptions.city"/>
         </el-form-item>
         <el-form-item label="企业编号:">
-          <el-input placeholder="支持填写同省至多10个企业编号" v-model="searchOptions.spCode"></el-input>
+          <el-input v-spcode placeholder="支持填写同省至多10个企业编号" v-model="searchOptions.spCode"></el-input>
         </el-form-item>
       </div>
-      <div slot="rol_second">
+      <div slot="rol_2">
         <el-form-item label="变更时间:">
           <time-picker :startTime.sync="searchOptions.startTime" :endTime.sync="searchOptions.endTime" />
         </el-form-item>
@@ -17,7 +17,7 @@
           <el-input v-model="searchOptions.spName"></el-input>
         </el-form-item>
       </div>
-      <div slot="rol_third">
+      <div slot="rol_3">
         <el-form-item label="修改项:">
           <el-select v-model="searchOptions.attrName" placeholder="请选择企业类型">
             <el-option label="全部" value=""></el-option>

@@ -1,48 +1,63 @@
 <template>
-  <el-breadcrumb class="app-breadcrumb" separator="/">
+  <el-breadcrumb class="app-breadcrumb" separator-class="el-icon-arrow-right">
     <transition-group name="breadcrumb">
       <el-breadcrumb-item v-for="(item,index)  in levelList" :key="item.path" v-if="item.meta.title">
-        <span v-if="item.redirect==='noredirect'||index==levelList.length-1" class="no-redirect">{{item.meta.title}}</span>
+        <span v-if="item.redirect==='noredirect'||index==levelList.length-1"
+              class="no-redirect">{{item.meta.title}}</span>
         <!--<router-link v-else :to="item.redirect||item.path">{{item.meta.title}}</router-link>-->
-        <span v-else >{{item.meta.title}}</span>
+        <span v-else>{{item.meta.title}}</span>
       </el-breadcrumb-item>
     </transition-group>
   </el-breadcrumb>
 </template>
 
 <script>
-export default {
-  created() {
-    this.getBreadcrumb()
-  },
-  data() {
-    return {
-      levelList: null
-    }
-  },
-  watch: {
-    $route() {
+  export default {
+    created() {
       this.getBreadcrumb()
-    }
-  },
-  methods: {
-    getBreadcrumb() {
-      let matched = this.$route.matched.filter(item => item.name)
-      this.levelList = matched
+    },
+    data() {
+      return {
+        levelList: null
+      }
+    },
+    watch: {
+      $route() {
+        this.getBreadcrumb()
+      }
+    },
+    methods: {
+      getBreadcrumb() {
+        let matched = this.$route.matched.filter(item => item.name)
+        this.levelList = matched
+      }
     }
   }
-}
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   .app-breadcrumb.el-breadcrumb {
     display: inline-block;
     font-size: 14px;
-    line-height: 50px;
-    margin-left: 10px;
+    line-height: 30px;
+    margin-left: 40px;
     .no-redirect {
       color: #97a8be;
       cursor: text;
+    }
+  }
+</style>
+<style rel="stylesheet/scss" lang="scss">
+  .el-breadcrumb__item:first-of-type {
+    float: none;
+    display: block;
+    line-height: 30px;
+    span {
+      font-size: 18px;
+      font-weight: normal;
+    }
+    i {
+      display: none;
     }
   }
 </style>

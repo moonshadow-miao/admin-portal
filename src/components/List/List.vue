@@ -1,11 +1,18 @@
 <template>
-  <div class="table-list">
-    <el-table @select="select"  @select-all="selectAll" header-row-class-name="table-header" size="mini" :data="data"  style="width: 100%" cell-class-name="table-cell">
-      <el-table-column :fixed="!isMobile" v-if="selection" type="selection" width="40"/>
+  <div class="table-list clearfix">
+    <!--<div class="fr m-b-5 m-r-10">-->
+      <!--<slot name="exports"></slot>-->
+    <!--</div>-->
+    <el-table  ref="table" @select="select" stripe @select-all="selectAll" header-row-class-name="table-header" size="mini" :data="data" style="width: 100%" cell-class-name="table-cell">
+      <el-table-column v-if="selection" type="selection" width="30"/>
       <slot></slot>
     </el-table>
     <div class="table-page clearfix">
-      <el-pagination :small="isMobile" :class="{fr:!isMobile}" class="pagination" background @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[5,10,20,50,100,200]" :page-size="pageLimit" layout="total, sizes, prev, pager, next, jumper" :total="dataCount">
+      <div class="multi-select fl p-l-5">
+        <el-checkbox class="m-r-10" v-if="selection" @change="checkedAll" v-model="checked">全选</el-checkbox>
+        <slot name="multi"></slot>
+      </div>
+      <el-pagination class="pagination fr" background @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[5,10,20,50,100,200]" :page-size="pageSize" @size-change="changePageLimit" layout="total, sizes, prev, pager, next, jumper" :total="dataCount">
       </el-pagination>
     </div>
   </div>
@@ -16,12 +23,10 @@
     name: "list",
     data() {
       return {
-        currentPage: 1
-      }
-    },
-    computed:{
-      isMobile(){
-        return this.$store.state.common.isMobile
+        currentPage: 1,
+        multipleSelection: [],
+        checked: false,
+        pageSize: this.pageLimit
       }
     },
     props: {
@@ -29,9 +34,9 @@
         type: Boolean,
         default: false
       },
-      selectList:{
-        type:Array,
-        default:()=>[]
+      selectList: {
+        type: Array,
+        default: () => []
       },
       data: {
         type: Array,
@@ -48,15 +53,30 @@
     },
     methods: {
       handleCurrentChange(val) {
-        this.$emit('query', {curPage: val,pageLimit:this.pageLimit})
+        this.$emit('query', {curPage: val, pageLimit: this.pageSize})
       },
-      selectAll(allData){
-        // let list =allData.map(item=>item.id)
-        this.$emit('update:selectList',allData)
+      changePageLimit(size){
+        this.pageSize = size
+        this.$emit('query', {curPage: 1, pageLimit: this.pageSize})
       },
-      select(data){
-        // let list =data.map(item=>item.id)
-        this.$emit('update:selectList',data)
+      selectAll(allData) {
+        this.multipleSelection = allData
+        this.checked = !!allData.length
+        this.$emit('update:selectList', allData)
+      },
+      select(data) {
+        this.multipleSelection = data
+        this.checked = data.length === this.pageLimit
+        this.$emit('update:selectList', data)
+      },
+      checkedAll(checked) {
+        if(checked){
+          this.data.forEach(item=> this.$refs.table.toggleRowSelection(item))
+          this.$emit('update:selectList', this.data)
+        }else {
+          this.$refs.table.clearSelection();
+          this.$emit('update:selectList', [])
+        }
       }
     }
   }
@@ -65,19 +85,29 @@
 
 <style rel="stylesheet/scss" lang="scss">
   .table-header {
-    th {
-      padding: 2px;
-      line-height: 14px;
-      background-color: #f7f7f7;
+    color: #939395;
+  }
+  
+  body .el-pagination {
+    font-weight: normal;
+    li {
+      font-size: 12px;
+      &.active {
+        background-color: #f4f4f5 !important;
+        color: #0097FF !important;
+      }
     }
   }
-
+  
   .table-list {
-    padding: 10px;
+    padding: 0px 10px 10px;
+    .el-checkbox {
+      margin-left: 5px;
+    }
   }
-
+  
   .table-page {
-    padding: 15px 20px;
+    padding: 15px 20px 15px 0;
     overflow: auto;
   }
 </style>

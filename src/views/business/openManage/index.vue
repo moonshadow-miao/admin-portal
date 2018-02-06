@@ -3,6 +3,7 @@
     <header>
       <ul class="step">
         <li v-for="(item,index) in headTitle" :key="index" :class="{'active':nextStep===item.value}">
+          <svg-icon className="step-icon" iconClass="step" v-if="index<headTitle.length-1"></svg-icon>
           <span>{{item.value}}</span>{{item.title}}
         </li>
       </ul>
@@ -14,11 +15,11 @@
         <div class="title">
           <span class="line p-l-5">企业信息</span>
         </div>
-        <sp-info  @handleNext="handleNext" />
+        <sp-info  @handleNext="handleNext" :preData="spInfo" />
       </div>
 
       <!--  渠道信息-->
-      <channel-info v-show="nextStep===2" @handleNext="handleNext" />
+      <channel-info v-show="nextStep===2" @handleNext="handleNext" :preData="channelInfo" />
 
       <!--账户信息-->
       <account-info v-show="nextStep===3" @handleNext="handleNext"/>
@@ -32,9 +33,10 @@
           <div class="sp-info">
             <h1 class="m-t-20 m-b-20 p-l-10">恭喜您，新企业开户成功！</h1>
             <ul class="m-b-10">
-              <li> 企业全称<span>上海帜讯信息技术股份有限公司</span></li>
-              <li> 企业编号<span>610000</span></li>
-              <li> 计费号码<span>13300000000</span></li>
+              <li> 企业全称<span>{{successInfo.spName}}</span></li>
+              <li> 企业编号<span>{{successInfo.spCode}}</span></li>
+              <li> 管理员账号<span>{{successInfo.name}}</span></li>
+              <li> 管理员手机号<span>{{successInfo.mobile}}</span></li>
             </ul>
             <span class="p-l-10" style="opacity:0.8">您可继续为企业配置业务信息，以便企业可以正常使用平台功能！</span>
           </div>
@@ -108,14 +110,31 @@
         }],
         nextStep: 1,
         visible: false,
+        spInfo:{},
+        successInfo:{},
+        channelInfo:{}
       }
     },
     components: {
       SpInfo,ChannelInfo,AccountInfo
     },
     methods: {
-      handleNext(val) {
+      handleNext(val,data,result) {
         this.nextStep = val;
+        switch(val+''){
+          case '1':
+            console.log(data);
+            this.spInfo=data;
+            break;
+          case '2':
+            if(data){
+              this.successInfo=data;
+            }
+            if(result){
+              this.channelInfo=result;
+            }
+            break;
+        }
       }
     }
   }
@@ -123,13 +142,12 @@
 
 <style scoped lang='scss'>
   .spOpen-container {
-    padding: 20px;
+    padding: 40px;
     .step {
       display: flex;
       justify-content: center;
       align-items: center;
-      background-color: #f7f7f7;
-      border-bottom: 1px solid #e9eced;
+      background-color: #f7f7fb;
       text-align: center;
       overflow: hidden;
       li {
@@ -137,61 +155,32 @@
         line-height: 46px;
         flex: 1;
         position: relative;
+        color:#959698;
+        font-size: 16px;
         span {
-          display: inline-block;
-          width: 26px;
-          height: 26px;
-          font-size: 16px;
+          display:inline-block;
+          width: 24px;
+          height: 24px;
           border-radius: 50%;
-          background-color: #f7f7f7;
-          line-height: 26px;
+          line-height: 24px;
           text-align: center;
           color: #757575;
-          margin-right: 6px;
+          margin-right: 15px;
           font-weight: bold;
-          border: 1px solid #BDBDBD;
-        }
-        &:before {
-          position: absolute;
-          right: -19px;
-          top: -2px;
-          content: '';
-          width: 0;
-          height: 0;
-          border-top: 25px solid transparent;
-          border-bottom: 25px solid transparent;
-          border-left: 18px solid #e9eced;
-          z-index: 1;
-        }
-        &:not(:last-child):after {
-          position: absolute;
-          right: -16px;
-          top: 0;
-          content: '';
-          width: 0;
-          height: 0;
-          border-top: 23px solid transparent;
-          border-bottom: 23px solid transparent;
-          border-left: 16px solid #f7f7f7;
-          z-index: 1;
+          border: 1px solid #959698;
         }
         &.active {
-          background-color: #2994dd;
           border-right: none;
-          color: #FFFFFF;
+          color: #3399ff;
           span {
-            color: #2994dd;
-            background-color: #FFFFFF;
+            color: #fff;
+            background-color: #3399ff;
             border: 1px solid #f6fafc;
-          }
-          &:after {
-            border-left: 16px solid #2994dd;
           }
         }
       }
     }
     .content-container {
-      margin-top: 30px;
       .el-form-item {
         label {
           text-align: center;
@@ -235,25 +224,39 @@
       padding: 0 20px;
     }
   }
+  .spOpen-container{
+    .el-input__inner{
+     // width:320px;
+    }
+  }
+
   .content-container{
 
     .title {
-      padding: 10px 15px;
+      padding-top:40px;
       border-bottom: 1px solid $borderColor;
-      margin-bottom: 20px;
+      padding-bottom: 20px;
       span {
         color: $mainBg;
-        position: relative;
+        font-size:14px;
+        position:relative;
         &.line::before {
-          position: absolute;
           content: '';
           background-color: $mainBg;
-          height: 18px;
-          width: 3px;
-          left: -5px;
-          top: -1px;
+          position: absolute;
+          height: 100%;
+          width: 2px;
+          left:-0;
+          top:0;
         }
       }
     }
+  }
+  .step-icon{
+    font-size:23px;
+    position:absolute;
+    right:-23px;
+    top:12px;
+    fill:#c0c7cc;
   }
 </style>

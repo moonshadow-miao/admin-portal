@@ -19,22 +19,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  font-family: "PingFang SC","Hiragino Sans GB", "Microsoft YaHei", "\5FAE\8F6F\96C5\9ED1", STXihei, STHeiti, Heiti, SimSun, sans-serif;
-}
-@media only screen and (max-width: 768px) {
-  *{
-    font-size: 12px;
-  }
-}
-
-@media only screen and (min-width: 768px) {
-  *{
-    font-size: 13px;
-  }
+  font-family: "Microsoft YaHei", "\5FAE\8F6F\96C5\9ED1", STXihei, STHeiti, Heiti, SimSun, sans-serif;
 }
 
 * {
   box-sizing: border-box;
+  font-size: 12px;
 }
 ul,li{
   padding:0;
@@ -85,11 +75,23 @@ button, input {
 .fr {
   float: right;
 }
+@media screen and (max-width: 1400px) {
+  body .search .el-checkbox__label{
+   padding-left: 2px;
+  }
+  body .search .el-checkbox-group .el-checkbox,body .search .el-checkbox + .el-checkbox {
+    margin-right: 4px;
+  }
+}
+
+body {
+  min-width: 1280px;
+}
 
 //main-container全局样式
 .app-main {
   min-height: 100%;
-  margin: 0 15px 100px 20px;
+  margin: 90px 0 100px 0;
   border: 1px solid #e9eced;
   background-color: #fff;
 }
@@ -100,8 +102,16 @@ button, input {
   }
 }
 
+body .el-form-item__label {
+  font-size: 12px;
+}
+
 .app-container {
   padding: 20px;
+}
+
+body .el-table__empty-block {
+  height: 150px;
 }
 
 /*公共样式*/
@@ -109,6 +119,60 @@ button, input {
 .cursor{
   cursor: pointer;
 }
+
+.color-success {color: #67c23a}
+.color-warning {color:#e6a23c}
+.color-danger {color: #f56c6c}
+.color-info {color: #909399}
+.color-primary {color: #0097FF}
+
+
+// 指令搜索样式
+.input_search {
+  display: none;
+  background-color: #fff;
+  position: absolute;
+  border: 1px solid $borderColor;
+  top: 40px;
+  width: 100%;
+  z-index: 100;
+  padding: 2px 0;
+  &:before {
+    position: absolute;
+    content: '';
+    border: 1px solid $borderColor;
+    width: 6px;
+    height: 6px;
+    border-bottom: none;
+    border-right: none;
+    top: -5px;
+    left: 22px;
+    background-color: #fff;
+    transform: rotate(45deg);
+  }
+  li {
+    padding-left: 20px;
+    line-height: 28px;
+    height: 28px;
+    cursor: pointer;
+    color: #616161;
+    font-size: 12px;
+    &:hover {
+      color: $textColor;
+      background-color: $menuBg;
+    }
+  }
+  .label {
+    padding: 3px 1px;
+    font-size: 12px;
+    background-color: #e6e6e6;
+    font-weight: normal;
+    white-space: nowrap;
+    border-radius: .25em;
+    margin-left: 5px;
+  }
+}
+
 
 
 /****************************** padding begin *************************************************/

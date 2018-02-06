@@ -21,7 +21,8 @@
       <div class="searchTab" v-show="showSearchTab">
         <ul class="platformslide mCustomScrollbar">
           <template v-if="searchList.length">
-            <li v-for="search in searchList" @click.stop="selectPlatform(search)" :key="search.id"><span>{{search.name}}</span><span class="fr">{{search.shortName}}</span>
+            <li v-for="search in searchList" @click.stop="selectPlatform(search)" :key="search.id">
+              <span>{{search.name}}</span><span class="fr">{{search.shortName}}</span>
             </li>
           </template>
           <li v-else class="empty">对不起，没有找到 "<span style="color: red">{{platformName}}</span>"</li>
@@ -34,6 +35,8 @@
 
 <script>
   import {mapState} from 'vuex'
+  import {setSession} from '@/utils'
+  
   let time = null
   export default {
     name: "platformSelector",
@@ -48,11 +51,11 @@
         searchList: [],
       }
     },
-    computed:{
-      ...mapState('common',['platformInfo']),
-      platformObj(){
+    computed: {
+      ...mapState('common', ['platformInfo']),
+      platformObj() {
         const obj = {};
-        this.platformInfo.forEach(({platformVo,channelVOes}) => {
+        this.platformInfo.forEach(({platformVo, channelVOes}) => {
           const firstCharacter = (platformVo.pinyin || platformVo.shortName).slice(0, 1).toUpperCase();
           platformVo.cities = channelVOes
           if (!obj[firstCharacter]) {
@@ -71,11 +74,13 @@
         sortObj['Z'] = sortObj['Z'] || []
         return sortObj
       },
-      platformList(){
-       return this.platformInfo.map(({platformVo,channelVOes}) => {
+      platformList() {
+        let list =  this.platformInfo.map(({platformVo, channelVOes}) => {
           platformVo.cities = channelVOes
           return platformVo
         })
+        setSession('platformList',list)
+        return list
       }
     },
     props: {
@@ -91,7 +96,7 @@
         type: [String, Number],
         default: '1'
       },
-      preview: {type:Boolean,default:false}
+      preview: {type: Boolean, default: false}
     },
     watch: {
       city(newVal) {
@@ -99,18 +104,18 @@
       },
       platform(newVal) {
         this.platform_id = newVal
-        if(!newVal){
-          return this.platformName="";
+        if (!newVal) {
+          return this.platformName = "";
         }
         this.platformName = this.platformList.find(item => item.id == newVal)['name'] || ''
       }
     },
-    async created(){
-      if(!this.platformInfo.length){
+    async created() {
+      if (!this.platformInfo.length) {
         await this.$store.dispatch('common/getPlatform')
       }
       let platform = this.platform || '1'
-      let initPlatform = this.platformList.find(item=>item.id == platform)
+      let initPlatform = this.platformList.find(item => item.id == platform)
       this.selectPlatform(initPlatform)
     },
     methods: {
@@ -127,13 +132,14 @@
         if (this.showCity) {
           this.city_id = "";
           this.citiesOption = obj.cities;
+          this.handelChange();
         }
       },
       handelChange() {
         this.$emit('update:city', this.city_id)
       },
       search() {
-        this.platform_id="";
+        this.platform_id = "";
         const name = this.platformName.toLowerCase()
         this.showSearchTab = name ? true : false
         if (!name) return
@@ -156,11 +162,11 @@
     z-index: 10;
     background-color: #fff;
   }
-
+  
   .platformSelector-contianer {
     position: relative;
   }
-
+  
   .platformSelector {
     width: 325px;
     @include tab;
@@ -172,7 +178,7 @@
       text-indent: 3px;
       border-bottom: 1px solid #DDD;
     }
-
+    
     .platformTab dl dt {
       float: left;
       padding-left: 3px;
@@ -183,14 +189,14 @@
       width: 20px;
       font-weight: 700;
     }
-
+    
     .platformTab dl dd {
       margin-left: 2px;
       float: left;
       width: 300px;
       margin-top: -4px;
     }
-
+    
     .platformTab dl dd a {
       font-size: 12px;
       padding-left: 5px;
@@ -203,9 +209,9 @@
         color: #3a8fc8;
       }
     }
-
+    
   }
-
+  
   .searchTab {
     width: 250px;
     @include tab;

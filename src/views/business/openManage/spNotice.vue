@@ -27,15 +27,19 @@
           <span>选择通知内容</span>
         </li>
       </ul>
-      <dl class="clearfix">
-        <dt>
-          <i class="el-icon-check"></i>
-        </dt>
-        <dd>
-          <p class="title">开户成功通知</p>
-          <p>尊敬的所属渠道商 您好：{您的账户已开户成功}。企业编号：{}，用户名：{}，初始密码：{}；登录网址：{}。</p>
-        </dd>
-      </dl>
+      <input type="radio" id="label1"/>
+      <label for="label1">
+        <dl class="clearfix">
+          <dt>
+            <i class="el-icon-check"></i>
+          </dt>
+          <dd>
+            <p class="title">开户成功通知</p>
+            <p>尊敬的所属渠道商 您好：{您的账户已开户成功}。企业编号：{}，用户名：{}，初始密码：{}；登录网址：{}。</p>
+          </dd>
+        </dl>
+      </label>
+
     </div>
     <div class="footer">
       <el-button type="primary" size="small">通知企业</el-button>
@@ -110,6 +114,9 @@
         border:1px solid #42a5f5;
       }
     }
+    /*>input:checked ~ label{*/
+      /*color:red;*/
+    /*}*/
   }
   .footer{
     margin-left:30px;

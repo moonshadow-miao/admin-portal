@@ -1,6 +1,6 @@
 <template>
   <scroll-bar>
-    <el-menu ref="menu" mode="vertical" class="menu" unique-opened :default-active="$route.meta && $route.meta.index" :collapse="isCollapse">
+    <el-menu background-color="#f7f7fb" text-color="#7b848c" :collapse="isCollapse" ref="menu" mode="vertical" class="menu" unique-opened :default-active="$route.meta && $route.meta.index">
       <sidebar-item :routes="routes"></sidebar-item>
     </el-menu>
   </scroll-bar>
@@ -12,14 +12,11 @@
   export default {
     components: {SidebarItem, ScrollBar},
     computed: {
-      sidebar() {
-        return this.$store.state.common.sidebar
-      },
       routes() {
         return this.$router.options.routes
       },
       isCollapse() {
-        return !this.sidebar.opened
+        return this.$store.state.common.menuIsExpand
       }
     },
     mounted(){

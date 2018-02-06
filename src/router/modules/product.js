@@ -6,7 +6,7 @@ export default {
   path: '/product',
   component: Layout,
   name:'product',
-  meta: {title: '产品管理', icon: 'form'},
+  meta: {title: '产品管理', icon: 'menu_product'},
   redirect: '/product/package/index',
   children: [
     {

@@ -30,7 +30,12 @@ export function validatAlphabets(str) {
 
 /* 手机号码 用于element-ui 表单验证*/
 export function validateMdn(rule, value, callback) {
-    if(value === '') {callback(new Error('新帜讯销售手机不能为空'))}
+  if(value === '') {callback(new Error('手机号码不能为空'))}
     /^1(3|4|5|7|8)\d{9}$/.test(value) ? callback() : callback(new Error('请输入正确的手机号'))
 }
 
+/* 邮箱 用于element-ui 表单验证*/
+export function validateEmail(rule, value, callback) {
+  if(value === '') {callback(new Error('邮箱不能为空'))}
+  /^[a-z]([a-z0-9]*[-_]?[a-z0-9]+)*@([a-z0-9]*[-_]?[a-z0-9]+)+[\.][a-z]{2,3}([\.][a-z]{2})?$/i.test(value) ? callback() : callback(new Error('请输入正确的邮箱'))
+}

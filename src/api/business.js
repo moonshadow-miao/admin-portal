@@ -60,9 +60,19 @@ export const Busi_add_spInfo = (data) => {
   return request({url: `${BUSINESS_SPOPEN}/add-sp-info `, data});
 };
 
+//获取企业信息
+export const Busi_get_spInfo = (data) => {
+  return request({url: `${BUSINESS_SPOPEN}/get-sp-info `, data});
+};
+
 //添加渠道信息
 export const Busi_add_channelInfo = (data) => {
   return request({url: `${BUSINESS_SPOPEN}/add-channel-info `, data});
+};
+
+//获取渠道信息
+export const Busi_get_channelInfo = (data) => {
+  return request({url: `${BUSINESS_SPOPEN}/get-channel-info `, data});
 };
 
 //添加账户信息
@@ -84,7 +94,22 @@ export const Busi_get_mdn_attribute = (data) => {
 
 // 开销户受理单 - 列表查询
 export const Busi_spOpen_acceptanceList = (data) => {
-  return request({url: `/business/sp-open/get-acceptance-list`, data});
+  return request({url: '/sp/acceptance/get-sp-acceptance-list', data});
+};
+
+// 开销户受理单 - 开户审核
+export const Busi_spOpen_openAudit = (data) => {
+  return request({url: `${BUSINESS_SPOPEN}/open-audit`, data});
+};
+
+// 开销户受理单 - 账户审核
+export const Busi_spOpen_accountAudit= (data) => {
+  return request({url: `${BUSINESS_SPOPEN}/account-audit`, data});
+};
+
+// 开销户受理单 - 资质审核
+export const Busi_spOpen_qualificationAudit= (data) => {
+  return request({url: `${BUSINESS_SPOPEN}/qualification-audit`, data});
 };
 
 /**************************************** 开户管理 end   *******************************/
