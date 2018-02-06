@@ -460,7 +460,7 @@
 --------------------------*/
 .el-input {
   position: relative;
-  font-size: 13px;
+  font-size: 12px;
   display: inline-block;
   width: 100%; }
   .el-input::-webkit-scrollbar {
@@ -481,7 +481,7 @@
         width: 6px; }
   .el-input .el-input__clear {
     color: #c0c4cc;
-    font-size: 13px;
+    font-size: 12px;
     line-height: 16px;
     cursor: pointer;
     -webkit-transition: color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
@@ -493,7 +493,7 @@
     background-color: #fff;
     background-image: none;
     border-radius: 4px;
-    border: 1px solid #dcdfe6;
+    border: 1px solid #EAEAEA;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     color: #606266;
@@ -518,7 +518,7 @@
       border-color: #c0c4cc; }
     .el-input__inner:focus {
       outline: none;
-      border-color: #46A3E8; }
+      border-color: #0097FF; }
   .el-input__suffix {
     position: absolute;
     height: 100%;
@@ -557,7 +557,7 @@
     pointer-events: none; }
   .el-input.is-active .el-input__inner {
     outline: none;
-    border-color: #46A3E8; }
+    border-color: #0097FF; }
   .el-input.is-disabled .el-input__inner {
     background-color: #f5f7fa;
     border-color: #e4e7ed;
@@ -584,7 +584,7 @@
     .el-input--medium .el-input__icon {
       line-height: 36px; }
   .el-input--small {
-    font-size: 13px; }
+    font-size: 12px; }
     .el-input--small .el-input__inner {
       height: 32px; }
     .el-input--small .el-input__icon {
@@ -610,7 +610,7 @@
     vertical-align: middle;
     display: table-cell;
     position: relative;
-    border: 1px solid #dcdfe6;
+    border: 1px solid #EAEAEA;
     border-radius: 4px;
     padding: 0 20px;
     width: 1px;
@@ -651,7 +651,7 @@
   display: inline-block;
   width: 100%;
   vertical-align: bottom;
-  font-size: 13px; }
+  font-size: 12px; }
   .el-textarea__inner {
     display: block;
     resize: vertical;
@@ -664,7 +664,7 @@
     color: #606266;
     background-color: #fff;
     background-image: none;
-    border: 1px solid #dcdfe6;
+    border: 1px solid #EAEAEA;
     border-radius: 4px;
     -webkit-transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
     transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1); }
@@ -680,7 +680,7 @@
       border-color: #c0c4cc; }
     .el-textarea__inner:focus {
       outline: none;
-      border-color: #46A3E8; }
+      border-color: #0097FF; }
   .el-textarea.is-disabled .el-textarea__inner {
     background-color: #f5f7fa;
     border-color: #e4e7ed;
@@ -719,20 +719,20 @@
     cursor: pointer;
     font-size: 13px; }
     .el-input-number__increase:hover, .el-input-number__decrease:hover {
-      color: #46A3E8; }
+      color: #0097FF; }
       .el-input-number__increase:hover:not(.is-disabled) ~ .el-input .el-input__inner:not(.is-disabled), .el-input-number__decrease:hover:not(.is-disabled) ~ .el-input .el-input__inner:not(.is-disabled) {
-        border-color: #46A3E8; }
+        border-color: #0097FF; }
     .el-input-number__increase.is-disabled, .el-input-number__decrease.is-disabled {
       color: #c0c4cc;
       cursor: not-allowed; }
   .el-input-number__increase {
     right: 1px;
     border-radius: 0 4px 4px 0;
-    border-left: 1px solid #dcdfe6; }
+    border-left: 1px solid #EAEAEA; }
   .el-input-number__decrease {
     left: 1px;
     border-radius: 4px 0 0 4px;
-    border-right: 1px solid #dcdfe6; }
+    border-right: 1px solid #EAEAEA; }
   .el-input-number.is-disabled .el-input-number__increase, .el-input-number.is-disabled .el-input-number__decrease {
     border-color: #e4e7ed;
     color: #e4e7ed; }
@@ -753,7 +753,7 @@
     line-height: 30px; }
     .el-input-number--small .el-input-number__increase, .el-input-number--small .el-input-number__decrease {
       width: 32px;
-      font-size: 13px; }
+      font-size: 12px; }
       .el-input-number--small .el-input-number__increase [class*=el-icon], .el-input-number--small .el-input-number__decrease [class*=el-icon] {
         -webkit-transform: scale(0.9);
         transform: scale(0.9); }
@@ -786,14 +786,14 @@
       transform: scale(0.8); }
   .el-input-number.is-controls-right .el-input-number__increase {
     border-radius: 0 4px 0 0;
-    border-bottom: 1px solid #dcdfe6; }
+    border-bottom: 1px solid #EAEAEA; }
   .el-input-number.is-controls-right .el-input-number__decrease {
     right: 1px;
     bottom: 1px;
     top: auto;
     left: auto;
     border-right: none;
-    border-left: 1px solid #dcdfe6;
+    border-left: 1px solid #EAEAEA;
     border-radius: 0 0 4px 0; }
   .el-input-number.is-controls-right[class*=medium] [class*=increase], .el-input-number.is-controls-right[class*=medium] [class*=decrease] {
     line-height: 17px; }

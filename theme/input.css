@@ -230,7 +230,7 @@
 --------------------------*/
 .el-input {
   position: relative;
-  font-size: 13px;
+  font-size: 12px;
   display: inline-block;
   width: 100%; }
   .el-input::-webkit-scrollbar {
@@ -251,7 +251,7 @@
         width: 6px; }
   .el-input .el-input__clear {
     color: #c0c4cc;
-    font-size: 13px;
+    font-size: 12px;
     line-height: 16px;
     cursor: pointer;
     -webkit-transition: color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
@@ -263,7 +263,7 @@
     background-color: #fff;
     background-image: none;
     border-radius: 4px;
-    border: 1px solid #dcdfe6;
+    border: 1px solid #EAEAEA;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     color: #606266;
@@ -288,7 +288,7 @@
       border-color: #c0c4cc; }
     .el-input__inner:focus {
       outline: none;
-      border-color: #46A3E8; }
+      border-color: #0097FF; }
   .el-input__suffix {
     position: absolute;
     height: 100%;
@@ -327,7 +327,7 @@
     pointer-events: none; }
   .el-input.is-active .el-input__inner {
     outline: none;
-    border-color: #46A3E8; }
+    border-color: #0097FF; }
   .el-input.is-disabled .el-input__inner {
     background-color: #f5f7fa;
     border-color: #e4e7ed;
@@ -354,7 +354,7 @@
     .el-input--medium .el-input__icon {
       line-height: 36px; }
   .el-input--small {
-    font-size: 13px; }
+    font-size: 12px; }
     .el-input--small .el-input__inner {
       height: 32px; }
     .el-input--small .el-input__icon {
@@ -380,7 +380,7 @@
     vertical-align: middle;
     display: table-cell;
     position: relative;
-    border: 1px solid #dcdfe6;
+    border: 1px solid #EAEAEA;
     border-radius: 4px;
     padding: 0 20px;
     width: 1px;
@@ -421,7 +421,7 @@
   display: inline-block;
   width: 100%;
   vertical-align: bottom;
-  font-size: 13px; }
+  font-size: 12px; }
   .el-textarea__inner {
     display: block;
     resize: vertical;
@@ -434,7 +434,7 @@
     color: #606266;
     background-color: #fff;
     background-image: none;
-    border: 1px solid #dcdfe6;
+    border: 1px solid #EAEAEA;
     border-radius: 4px;
     -webkit-transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
     transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1); }
@@ -450,7 +450,7 @@
       border-color: #c0c4cc; }
     .el-textarea__inner:focus {
       outline: none;
-      border-color: #46A3E8; }
+      border-color: #0097FF; }
   .el-textarea.is-disabled .el-textarea__inner {
     background-color: #f5f7fa;
     border-color: #e4e7ed;

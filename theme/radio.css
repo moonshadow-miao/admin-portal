@@ -348,19 +348,19 @@
   display: inline-block;
   white-space: nowrap;
   outline: none;
-  font-size: 13px;
+  font-size: 12px;
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none; }
   .el-radio.is-bordered {
     padding: 12px 20px 0 10px;
     border-radius: 4px;
-    border: 1px solid #dcdfe6;
+    border: 1px solid #EAEAEA;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     height: 40px; }
     .el-radio.is-bordered.is-checked {
-      border-color: #46A3E8; }
+      border-color: #0097FF; }
     .el-radio.is-bordered.is-disabled {
       cursor: not-allowed;
       border-color: #ebeef5; }
@@ -421,20 +421,20 @@
       color: #c0c4cc;
       cursor: not-allowed; }
     .el-radio__input.is-checked .el-radio__inner {
-      border-color: #46A3E8;
-      background: #46A3E8; }
+      border-color: #0097FF;
+      background: #0097FF; }
       .el-radio__input.is-checked .el-radio__inner::after {
         -webkit-transform: translate(-50%, -50%) scale(1);
         transform: translate(-50%, -50%) scale(1); }
     .el-radio__input.is-checked + .el-radio__label {
-      color: #46A3E8; }
+      color: #0097FF; }
     .el-radio__input.is-focus .el-radio__inner {
-      border-color: #46A3E8; }
+      border-color: #0097FF; }
   .el-radio__inner {
-    border: 1px solid #dcdfe6;
+    border: 1px solid #EAEAEA;
     border-radius: 100%;
-    width: 14px;
-    height: 14px;
+    width: 13px;
+    height: 13px;
     background-color: #fff;
     position: relative;
     cursor: pointer;
@@ -442,7 +442,7 @@
     -webkit-box-sizing: border-box;
     box-sizing: border-box; }
     .el-radio__inner:hover {
-      border-color: #46A3E8; }
+      border-color: #0097FF; }
     .el-radio__inner::after {
       width: 4px;
       height: 4px;
@@ -471,8 +471,8 @@
   .el-radio:focus:not(.is-focus):not(:active) {
     /*获得焦点时 样式提醒*/ }
     .el-radio:focus:not(.is-focus):not(:active) .el-radio__inner {
-      -webkit-box-shadow: 0 0 2px 2px #46A3E8;
-      box-shadow: 0 0 2px 2px #46A3E8; }
+      -webkit-box-shadow: 0 0 2px 2px #0097FF;
+      box-shadow: 0 0 2px 2px #0097FF; }
   .el-radio__label {
-    font-size: 14px;
+    font-size: 12px;
     padding-left: 10px; }

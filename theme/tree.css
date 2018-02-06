@@ -244,7 +244,7 @@
     top: 50%;
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-    color: #727474; }
+    color: #4f6e80; }
 
 .el-tree-node {
   white-space: nowrap;
@@ -285,10 +285,10 @@
       color: transparent;
       cursor: default; }
   .el-tree-node__label {
-    font-size: 13px; }
+    font-size: 12px; }
   .el-tree-node__loading-icon {
     margin-right: 8px;
-    font-size: 13px;
+    font-size: 12px;
     color: #c0c4cc; }
   .el-tree-node > .el-tree-node__children {
     overflow: hidden;
@@ -297,4 +297,4 @@
     display: block; }
 
 .el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
-  background-color: #f0f8fd; }
+  background-color: #ebf7ff; }
